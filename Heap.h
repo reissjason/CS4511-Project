@@ -60,7 +60,6 @@ public:
 
 template <class T>
 Heap<T>::Heap() : size(0){
-	cout << "create heap" << endl;
 	list = new T*[MAX_SIZE];
 }
 
@@ -73,8 +72,20 @@ Heap<T>::~Heap() {
 template <class T>
 void Heap<T>::print()
 {
-	for (int i = 1; i <= this->size; i++)
-		cout << this->list[i]->getValue() << " : " << ((this->list[Heap::parent(i)] != NULL) ? this->list[Heap::parent(i)]->getValue() : 0) << endl;
+	int depth = (int)log2(size);
+
+	for (int i = 0; i <= depth; i++) {
+		for (int x = 1; x <= (depth-i); x++)
+			cout << "  ";
+		for (int j = 1; j <= pow(2, i); j++) {
+			//cout << "index: " << (j+(int)pow(2,i))-1 << endl;
+			int index = j+(int)pow(2,i)-1;
+			if (this->list[index] != NULL)
+				cout << this->list[index]->getValue() << " ";
+		}
+		cout << endl;
+	}
+		// cout << this->list[i]->getValue() << " : " << ((this->list[Heap::parent(i)] != NULL) ? this->list[Heap::parent(i)]->getValue() : 0) << endl;
 }
 
 
@@ -85,24 +96,20 @@ T* Heap<T>::getNode(int i) {
 
 template <class T>
 void Heap<T>::heapify(int i) {
-	cout << "heapify(" << i << ")" << endl;
 
 	int l = left(i);
 	int r = right(i);
 	int smallest = 0;
 
 	if (l <= this->size and list[l]->getValue() < list[i]->getValue()) {
-		cout << list[l]->getValue() << " < " << list[i]->getValue() << endl;
 		smallest = l;
 	} else
 		smallest = i;
 
 	if (r <= this->size and list[r]->getValue() < list[smallest]->getValue()) {
-		cout << list[r]->getValue() << " < " << list[smallest]->getValue() << endl;
 		smallest = r;
 	}
 
-	cout << "largest " << list[smallest]->getValue() << " i " << list[i]->getValue() << endl;
 	if (smallest != i) {
 		T* temp = list[i];
 		list[i] = list[smallest];
@@ -135,12 +142,11 @@ MinHeap<T>::~MinHeap() { }
 template <class T>
 void MinHeap<T>::decreaseKey(int i, T* node) {
 	if (node->getValue() > this->list[i]->getValue()) {
-		cout << "new key is larger than current key" << endl;
 		return;
 	}
 
 	this->list[i] = node;
-	while (i > 1 && this->list[this->parent(i)] < this->list[i]) {
+	while (i > 1 && this->list[this->parent(i)]->getValue() > this->list[i]->getValue()) {
 		T* temp =  this->list[i];
 		 this->list[i] =  this->list[this->parent(i)];
 		 this->list[this->parent(i)] = temp;
@@ -152,25 +158,23 @@ void MinHeap<T>::decreaseKey(int i, T* node) {
 template <class T>
 void MinHeap<T>::addNode(T* node) {
 	this->size++;
-	cout << "add node : size " << this->size << endl;
 	this->list[this->size] = new T((int)pow(2,30));
 	decreaseKey(this->size, node);
 }
 
 template <class T>
 T* MinHeap<T>::getMin() {
-	return NULL;
+	return this->list[1];
 }
 
 template <class T>
 void MaxHeap<T>::increaseKey(int i, T* node) {
 	if (node->getValue() < this->list[i]->getValue()) {
-		cout << "new key is smaller than current key" << endl;
 		return;
 	}
 
 	this->list[i] = node;
-	while (i > 1 && this->list[this->parent(i)] > this->list[i]) {
+	while (i > 1 && this->list[this->parent(i)]->getValue() < this->list[i]->getValue()) {
 		Node* temp = this->list[i];
 		this->list[i] = this->list[this->parent(i)];
 		this->list[this->parent(i)] = temp;
@@ -181,14 +185,13 @@ void MaxHeap<T>::increaseKey(int i, T* node) {
 template <class T>
 void MaxHeap<T>::addNode(T* node) {
 	this->size++;
-	cout << "add node : size " << this->size << endl;
 	this->list[this->size] = new Node(-(int)pow(2,30));
 	increaseKey(this->size, node);
 }
 
 template <class T>
 T* MaxHeap<T>::getMax() {
-	return NULL;
+	return this->list[1];
 }
 
 template <class T>

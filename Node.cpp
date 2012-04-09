@@ -8,13 +8,11 @@
 #include "Node.h"
 
 Node::Node(int value) {
-	cout << "create node(" << value << ")" << endl;
 	this->value = value;
 	this->next = NULL;
 }
 
 Node::~Node() {
-	cout << "create node()" << endl;
 	this->next = NULL;
 	// TODO Auto-generated destructor stub
 }
