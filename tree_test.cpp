@@ -10,6 +10,7 @@
 #include <cstdlib>
 
 #include "Tree.h"
+#include "Node.h"
 
 using namespace std;
 
@@ -18,17 +19,20 @@ int main(int args, char** argv) {
 
 	int i = 5;
 
-	Tree tree(10);
+	int* x = new int(10);
+	Tree<Node<int>,int> tree(x);
 
 	srand ( time(NULL) );
 
 	while (i > 0) {
 		//cout << "step " << i << endl;
-		Node* n = new Node(rand()%100);
+		int* in = new int(rand()%100);
+		Node<int>* n = new Node<int>(in);
 		tree.addChild(n);
 
 		for (int j = 0; j < 3; j++) {
-			Node* m = new Node(rand()%100);
+			int* inn = new int(rand()%100);
+			Node<int>* m = new Node<int>(inn);
 			n->addChild(m);
 		}
 		i--;

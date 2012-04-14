@@ -17,27 +17,32 @@ int main(int args, char** argv) {
 	cout << "start Heap Test" << endl;
 
 	int i = 1;
-	MinHeap<Node> heap;
-	MaxHeap<Node> maxHeap;
+	MinHeap<Node<int> > minHeap;
+	MaxHeap<Node<int> > maxHeap;
 
 	srand ( time(NULL) );
 
 	while (i < 10) {
-		//cout << "step " << i << endl;
-		Node* n = new Node(rand()%100);
+		cout << "step " << i << endl;
+		int* in = new int(rand()%100);
+
+		Node<int>* n = new Node<int>(in);
+		cout << "made node" << endl;
 		maxHeap.addNode(n);
-		heap.addNode(n);
+		cout << "added to maxHeap" << endl;
+		minHeap.addNode(n);
+		cout << "added to minHeap" << endl;
 		//heap.print();
 		i++;
 	}
 
 	cout << "final MinHeap:" << endl;
-	heap.print();
-	cout << "Min Value: " << heap.getMin()->getValue() << endl;
+	minHeap.print();
+	cout << "Min Value: " << *(minHeap.getMin()->getValue()) << endl;
 
 	cout << "final MaxHeap:" << endl;
 	maxHeap.print();
-	cout << "Max Value: " << maxHeap.getMax()->getValue() << endl;
+	cout << "Max Value: " << *(maxHeap.getMax()->getValue()) << endl;
 
 
 	cout << "done" << endl;

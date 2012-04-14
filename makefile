@@ -5,29 +5,29 @@ compiler = g++
 all: heap_test
 
 # Tool invocations
-heap_test: heap_test.cpp Node.o debug_print.o
+heap_test: heap_test.cpp debug_print.o Heap.h Node.h
 	@echo 'Building target: $@'
 	@echo 'Invoking: GCC C++ Linker'
-	$(compiler) $(flags) -o"heap_test" heap_test.cpp Node.o debug_print.o
+	$(compiler) $(flags) -o"heap_test" heap_test.cpp debug_print.o
 	@echo 'Finished building target: $@'
 	@echo ' '
 
 debug_print.o: debug_print.cpp debug_print.h
 	$(compiler) $(flags) -c debug_print.cpp
 
-tree_test: tree_test.cpp Node.o Tree.o
-	$(compiler) $(flags) -o "tree_test" tree_test.cpp Tree.o Node.o debug_print.cpp
+tree_test: tree_test.cpp Node.h Tree.h
+	$(compiler) $(flags) -o "tree_test" tree_test.cpp debug_print.cpp
 
-Tree.o: Tree.h Tree.cpp Node.o
-	$(compiler) $(flags) -c Tree.cpp Node.o debug_print.cpp
+pkmn:	pkmn.cpp pkmn.h attack.o
+	g++ -c pkmn.cpp -o pkmn.o
 
-Node.o: Node.h Node.cpp
-	$(compiler) $(flags) -c Node.cpp debug_print.cpp
+attack:	attack.cpp attack.h
+	g++ -c attack.cpp -o attack.o
 
 
 # Other Targets
 clean:
-	-rm -fr Node.o heap_test.o heap_test
+	-rm -fr *.o tree_test heap_test
 	-@echo ' '
 
 .PHONY: all clean dependents

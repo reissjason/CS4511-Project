@@ -10,12 +10,47 @@
 #ifndef TREE_H_
 #define TREE_H_
 
-class Tree : public Node{
+template <class T, class S>
+class Tree : public Node<S> {
 public:
-	Tree(int val);
+	Tree(S* val);
 	virtual ~Tree();
 	void print();
-	void print(Node* root, int depth);
+	void print(T* root, int depth);
 };
 
+template <class T, class S>
+Tree<T,S>::Tree(S* val) : T(val) {
+
+}
+
+template <class T, class S>
+Tree<T,S>::~Tree() {
+	// TODO Auto-generated destructor stub
+}
+
+template <class T, class S>
+void Tree<T,S>::print() {
+	print((T*)this, 0);
+}
+
+template <class T, class S>
+void Tree<T,S>::print(T* root, int depth) {
+	if (root == NULL) return;
+
+	cout << "d: " << depth;
+
+	if (root->parent)
+		cout << " parent: " << *(root->parent->getValue());
+	cout << endl;
+
+	cout << "node: " << *(root->getValue()) << endl;
+
+	T* temp = root->getChildren();
+
+	while (temp != NULL) {
+		print(temp, depth+1);
+		temp = temp->getNext();
+	}
+}
 #endif /* TREE_H_ */

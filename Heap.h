@@ -81,7 +81,7 @@ void Heap<T>::print()
 			//cout << "index: " << (j+(int)pow(2,i))-1 << endl;
 			int index = j+(int)pow(2,i)-1;
 			if (this->list[index] != NULL)
-				cout << this->list[index]->getValue() << " ";
+				cout << *(this->list[index]->getValue()) << " ";
 		}
 		cout << endl;
 	}
@@ -101,12 +101,12 @@ void Heap<T>::heapify(int i) {
 	int r = right(i);
 	int smallest = 0;
 
-	if (l <= this->size and list[l]->getValue() < list[i]->getValue()) {
+	if (l <= this->size and *(list[l]->getValue()) < *(list[i]->getValue())) {
 		smallest = l;
 	} else
 		smallest = i;
 
-	if (r <= this->size and list[r]->getValue() < list[smallest]->getValue()) {
+	if (r <= this->size and *(list[r]->getValue()) < *(list[smallest]->getValue())) {
 		smallest = r;
 	}
 
@@ -141,12 +141,12 @@ MinHeap<T>::~MinHeap() { }
 
 template <class T>
 void MinHeap<T>::decreaseKey(int i, T* node) {
-	if (node->getValue() > this->list[i]->getValue()) {
+	if (node->getValue() && this->list[i] && this->list[i]->getValue() && *(node->getValue()) > *(this->list[i]->getValue())) {
 		return;
 	}
 
 	this->list[i] = node;
-	while (i > 1 && this->list[this->parent(i)]->getValue() > this->list[i]->getValue()) {
+	while (i > 1 && *(this->list[this->parent(i)]->getValue()) > *(this->list[i]->getValue())) {
 		T* temp =  this->list[i];
 		 this->list[i] =  this->list[this->parent(i)];
 		 this->list[this->parent(i)] = temp;
@@ -157,8 +157,9 @@ void MinHeap<T>::decreaseKey(int i, T* node) {
 
 template <class T>
 void MinHeap<T>::addNode(T* node) {
+	dprint("adding node to min heap", 4);
 	this->size++;
-	this->list[this->size] = new T((int)pow(2,30));
+	this->list[this->size] = new T();
 	decreaseKey(this->size, node);
 }
 
@@ -169,13 +170,16 @@ T* MinHeap<T>::getMin() {
 
 template <class T>
 void MaxHeap<T>::increaseKey(int i, T* node) {
-	if (node->getValue() < this->list[i]->getValue()) {
+	dprint("increase key", 4);
+
+	if (node->getValue() && this->list[i] && this->list[i]->getValue() && *(node->getValue()) < *(this->list[i]->getValue())) {
 		return;
 	}
 
+	dprint("move key", 4);
 	this->list[i] = node;
-	while (i > 1 && this->list[this->parent(i)]->getValue() < this->list[i]->getValue()) {
-		Node* temp = this->list[i];
+	while (i > 1 && *(this->list[this->parent(i)]->getValue()) < *(this->list[i]->getValue())) {
+		T* temp = this->list[i];
 		this->list[i] = this->list[this->parent(i)];
 		this->list[this->parent(i)] = temp;
 		i = this->parent(i);
@@ -184,8 +188,9 @@ void MaxHeap<T>::increaseKey(int i, T* node) {
 
 template <class T>
 void MaxHeap<T>::addNode(T* node) {
+	dprint("adding node to max heap", 4);
 	this->size++;
-	this->list[this->size] = new Node(-(int)pow(2,30));
+	this->list[this->size] = new T();
 	increaseKey(this->size, node);
 }
 
