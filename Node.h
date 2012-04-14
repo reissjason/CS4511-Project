@@ -7,6 +7,7 @@
 
 #include <iostream>
 
+#include "debug_print.h"
 using namespace std;
 
 #ifndef NODE_H_
@@ -17,7 +18,7 @@ public:
 	Node() {};
 	Node(int value);
 	virtual ~Node();
-	void addChild(Node &node);
+	void addChild(Node *node);
 	Node* getChildren();
 	Node* getParent();
 	Node* getNext();

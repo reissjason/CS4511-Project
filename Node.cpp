@@ -8,28 +8,44 @@
 #include "Node.h"
 
 Node::Node(int value) {
+	this->children = NULL;
 	this->value = value;
 	this->next = NULL;
+	this->parent = NULL;
 }
 
 Node::~Node() {
+	Node* temp = this->children;
+	while (temp != NULL) {
+		Node* del = temp;
+		temp = temp->next;
+		delete del;
+	}
+	this->children = NULL;
 	this->next = NULL;
-	// TODO Auto-generated destructor stub
 }
 
 Node* Node::getChildren() {
 	return this->children;
 }
 
-void Node::addChild(Node &node) {
+void Node::addChild(Node* node) {
+	dprint("adding child", 4);
+	node->parent = this;
+
 	Node* temp = this->getLastChild();
-	temp->next = &node;
+	if (temp)
+		temp->next = node;
+	else
+		this->children = node;
+	dprint("added child", 4);
 }
 
 Node* Node::getLastChild() {
+	dprint("getting last child", 4);
 	Node* temp = this->children;
 
-	while (temp != NULL)
+	while (temp != NULL && temp->getNext() != NULL)
 		temp = temp->getNext();
 
 	return temp;
