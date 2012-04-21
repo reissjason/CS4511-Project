@@ -2,30 +2,31 @@
 #include <string>
 #include <iostream>
 
-Pokeman::Pokeman(int hP, int totalHp, TinyAttack &attack1, TinyAttack &attack2){
+
+Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2){
 	this->hp = hP;
 	this->totalHP = totalHp;
-	this->attack1 = attack1;
-	this->attack2 = attack2;
+	for(int i = 0; i < NUM_OF_ATTACKS; i++){
+		this->attack[i] = new TinyAttack;
+	}
+	this->attack[0] = attack1;
+	this->attack[1] = attack2;
 }
 
 int Pokeman::getHealth(){
 	return this->hp;
 }
 
-TinyAttack &Pokeman::getAttack1(){
-	return this->attack1;
+TinyAttack* Pokeman::getAttack1(){
+	return this->attack[0];
 }
 
-TinyAttack &Pokeman::getAttack2(){
-	return this->attack2;
+TinyAttack* Pokeman::getAttack2(){
+	return this->attack[1];
 }
 
-TinyAttack &Pokeman::getAttack(int i){
-	if(i==1){
-		return this->attack1;
-	}
-	else if (i == 2) { return this->attack2; }
+TinyAttack* Pokeman::getAttack(int i){
+	return this->attack[i-1]; //Minus 1 because it only makes sense to computer sciences to ask for attack number 0.
 }
 
 bool Pokeman::changeHealth(int power){
@@ -39,8 +40,8 @@ bool Pokeman::changeHealth(int power){
 Pokeman* Pokeman::clone(){
 	int myHP = this->hp;
 	int myTotalHP = this->totalHP;
-	TinyAttack myAttack1 = this->attack1;
-	TinyAttack myAttack2 = this->attack2;
+	TinyAttack* myAttack1 = this->attack[0];
+	TinyAttack* myAttack2 = this->attack[1];
 	Pokeman* newPokeman = new Pokeman(myHP, myTotalHP, myAttack1, myAttack2);
 	return newPokeman;
 }
@@ -69,3 +70,4 @@ void Pokeman::print() {
 	cout << "Attack has power: " + attackPower << endl;
 
 }*/
+

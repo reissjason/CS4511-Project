@@ -12,17 +12,20 @@ using namespace std;
 #ifndef POKEMAN_H_
 #define POKEMAN_H_
 
+#define NUM_OF_ATTACKS 4
+
 class Pokeman {
 public:
-	Pokeman(int hp, int totalHP, TinyAttack &primaryAttack, TinyAttack &secondaryAttack);
+	Pokeman(int hp, int totalHP, TinyAttack* primaryAttack, TinyAttack* secondaryAttack);
 	Pokeman(){};
 	Pokeman(const Pokeman& p);
 	int getHealth();
 	bool changeHealth(int power);
-	TinyAttack &getAttack1();
-	TinyAttack &getAttack2();
-	TinyAttack &getAttack(int);
+	TinyAttack *getAttack1();
+	TinyAttack *getAttack2();
+	TinyAttack *getAttack(int);
 	Pokeman* clone();
+
 	void print();
 
 	/*void useAttack(TinyAttack attack);*/
@@ -30,8 +33,7 @@ public:
 private:
 	int hp;
 	int totalHP;
-	TinyAttack attack1;
-	TinyAttack attack2;
+	TinyAttack* attack[NUM_OF_ATTACKS];
 };
 
 #endif /* POKEMAN_H_ */

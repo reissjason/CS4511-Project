@@ -15,8 +15,8 @@ using namespace std;
 
 class State {
 public: 
-	State(Pokeman &pokemon1, Pokeman &pokemon2, int turn);
-	State(Pokeman &winner);
+	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
+	State(Pokeman *winner);
 	State* nextState();
 	bool isOver;
 	Pokeman* myPokemon;

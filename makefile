@@ -35,11 +35,22 @@ minimax_test: minimax.cpp minimax_test.cpp
 
 tinyAttack.o: tinyAttack.cpp TinyAttack.h
 	g++ -c tinyAttack.cpp
+	
+tiny_test: pokeman tinyattack state
+	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp Pokeman.o TinyAttack.o State.o
 
+pokeman: Pokeman.cpp Pokeman.h tinyattack
+	g++ -c Pokeman.cpp -o Pokeman.o
+
+tinyattack: TinyAttack.cpp TinyAttack.h
+	g++ -c TinyAttack.cpp -o TinyAttack.o
+
+state: State.cpp State.h pokeman
+	g++ -c State.cpp -o State.o
+	
 # Other Targets
 clean:
 	-rm -fr *.o *_test
-	-@echo ' '
 
 .PHONY: all clean dependents
 
