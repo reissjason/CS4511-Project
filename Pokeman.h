@@ -21,6 +21,7 @@ public:
 	Pokeman(int hp, int totalHP, TinyAttack*, TinyAttack*);
 	Pokeman(int hp, int totalHP, TinyAttack*);
 	Pokeman(){};
+	Pokeman(const Pokeman& p);
 	int getHealth();
 	bool changeHealth(int power);
 	TinyAttack *getAttack1();
@@ -29,6 +30,10 @@ public:
 	Pokeman* clone();
 	void usedAction(int);
 	int getLastAction();
+
+	void print();
+
+	/*void useAttack(TinyAttack attack);*/
 
 private:
 	int hp;	

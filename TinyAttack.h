@@ -16,10 +16,12 @@ class TinyAttack {
 public:
   TinyAttack(string attackType, int attackDamage);
   TinyAttack();
+  // Copy constructor
+  TinyAttack(const TinyAttack& ta) : type(ta.type), power(ta.power) { }
   string getType();
   int getPower();
 
-private:
+protected:
   string type;
   int power;
 };

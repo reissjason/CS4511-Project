@@ -24,6 +24,18 @@ pkmn:	pkmn.cpp pkmn.h attack.o
 attack:	attack.cpp attack.h
 	g++ -c attack.cpp -o attack.o
 
+pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o
+	$(compiler) $(flags) -o pokeman_test pokeman_test.cpp tinyAttack.o pokeman.o
+
+pokeman.o: pokeman.cpp Pokeman.h
+	$(compiler) $(flags) -c pokemon.cpp
+
+minimax_test: minimax.cpp minimax_test.cpp
+	$(compiler) $(flags) minimax_test.cpp minimax.cpp debug_print.cpp -o minimax_test
+
+tinyAttack.o: tinyAttack.cpp TinyAttack.h
+	g++ -c tinyAttack.cpp
+	
 tiny_test: pokeman tinyattack state
 	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp Pokeman.o TinyAttack.o State.o
 
@@ -40,8 +52,7 @@ state_tree_test: state tree_test state_tree_test.cpp
 
 # Other Targets
 clean:
-	-rm -fr *.o tree_test heap_test tiny_test state_tree_test
-	-@echo ' '
+	-rm -fr *.o *_test
 
 .PHONY: all clean dependents
 

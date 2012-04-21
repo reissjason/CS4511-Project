@@ -89,3 +89,4 @@ Pokeman* Pokeman::clone(){
 	Pokeman* newPokeman = new Pokeman(myHP, myTotalHP, myAttack1, myAttack2);
 	return newPokeman;
 }
+// Copy constructorPokeman::Pokeman(const Pokeman& p) {	hp = p.hp;	totalHP = p.totalHP;	attack1 = p.attack1;	attack2 = p.attack2;}void Pokeman::print() {	cout << "Pokeman" << endl;	cout << "T hp: " << this->totalHP << endl;	cout << "hp: " << this->hp << endl;	cout << "att1: " << this->attack1.getType() << endl;	cout << "att2: " << this->attack2.getType() << endl;}/*void Pokeman::useAttack(TinyAttack attack){	string attackType = attack.getType();	cout << "Using attack type " + attackType << endl;	int attackPower = attack.getPower();	cout << "Attack has power: " + attackPower << endl;}*/

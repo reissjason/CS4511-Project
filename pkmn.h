@@ -13,10 +13,12 @@ public:
   int * get_stat();
   string * get_type();
   string get_ability();
+  struct attack_list get_attack_head();
   void change_type(string type1, string type2);
   void add_possible_attack(attack * atk);
   void add_known_attack(attack * atk);
   void add_item(string p_item);
+
 
 private:
   string name;
@@ -25,6 +27,7 @@ private:
   int stat_increases[6];
   string types[2];
   string ability;
+  string status;
   struct attack_list
   {
     attack * atk_ptr;
@@ -33,5 +36,7 @@ private:
   attack_list* pos_atk_head;
   attack_list* known_atk_head;
   string item;
+  bool charge; //to be used in damage calculation
+  //::TODO:: add a flashfire modifier?
 };
 #endif /*pkmn.h*/
