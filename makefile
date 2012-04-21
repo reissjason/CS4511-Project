@@ -24,10 +24,21 @@ pkmn:	pkmn.cpp pkmn.h attack.o
 attack:	attack.cpp attack.h
 	g++ -c attack.cpp -o attack.o
 
+pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o
+	$(compiler) $(flags) -o pokeman_test pokeman_test.cpp tinyAttack.o pokeman.o
+
+pokeman.o: pokeman.cpp Pokeman.h
+	$(compiler) $(flags) -c pokemon.cpp
+
+minimax_test: minimax.cpp minimax_test.cpp
+	$(compiler) $(flags) minimax_test.cpp minimax.cpp debug_print.cpp -o minimax_test
+
+tinyAttack.o: tinyAttack.cpp TinyAttack.h
+	g++ -c tinyAttack.cpp
 
 # Other Targets
 clean:
-	-rm -fr *.o tree_test heap_test
+	-rm -fr *.o *_test
 	-@echo ' '
 
 .PHONY: all clean dependents

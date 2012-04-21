@@ -13,6 +13,8 @@ void change_lead(pkmn new_lead);
 
 
 private:
+  bool lightscreen;
+  bool reflect;
 
 };
 #endif /*team.h*/

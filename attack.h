@@ -7,7 +7,7 @@
 
 class attack {
 public:
-  attack(string a_name, string a_type, string a_effect, int a_power, float a_acc, float a_effect_chance);
+  attack(string a_name, string a_type, string a_effect, string a_p_or_s, int a_power, float a_acc, float a_effect_chance);
   string get_name();
   string get_type();
   string get_effect();
@@ -19,6 +19,7 @@ private:
   string name;
   string type;
   string effect;
+  string p_or_s;
   int power;
   float acc;
   float effect_chance;

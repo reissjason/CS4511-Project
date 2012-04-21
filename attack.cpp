@@ -6,10 +6,11 @@ using namespace std;
 
 #include "attack.h"
 
-attack::attack(string a_name, string a_type, string a_effect, int a_power, float a_acc, float a_effect_chance){
+attack::attack(string a_name, string a_type, string a_effect, string a_p_or_s, int a_power, float a_acc, float a_effect_chance){
   name = a_name;
   type = a_type;
   effect = a_effect;
+  p_or_s = a_p_or_s;
   power = a_power;
   acc = a_acc;
   effect_chance = a_effect_chance;

@@ -17,6 +17,7 @@ pkmn::pkmn(string p_name, int * p_stats, string * p_types, string p_ability){
     types[0] = p_types[0];
   }
   ability = p_ability;
+  status = NULL;
   pos_atk_head = new struct attack_list;
   pos_atk_head->atk_ptr = NULL;
   pos_atk_head->next = NULL;

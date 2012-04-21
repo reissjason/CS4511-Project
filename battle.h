@@ -11,10 +11,15 @@
 class battle {
 public:
 battle(team * player, team * opponent);
-int calculate_damage(int attack; int defense; int power);
+int calculate_damage(attack * move; pkmn * user; pkmn * defender);
+float user_item_base_dmg(string item, string p_or_s, string type);
+float user_ability_base_dmg(string ability, attack * move, int current_hp, int max_hp);
+
+float stat_modifier_func(int statChange, string userAbility, string foeAbility);
 
 
 private:
+  string weather;
 
 };
 #endif /*battle.h*/

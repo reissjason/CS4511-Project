@@ -16,12 +16,15 @@ class Pokeman {
 public:
 	Pokeman(int hp, int totalHP, TinyAttack &primaryAttack, TinyAttack &secondaryAttack);
 	Pokeman(){};
+	Pokeman(const Pokeman& p);
 	int getHealth();
 	bool changeHealth(int power);
 	TinyAttack &getAttack1();
 	TinyAttack &getAttack2();
 	TinyAttack &getAttack(int);
 	Pokeman* clone();
+	void print();
+
 	/*void useAttack(TinyAttack attack);*/
 
 private:
