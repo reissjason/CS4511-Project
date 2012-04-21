@@ -16,7 +16,10 @@ using namespace std;
 
 class Pokeman {
 public:
-	Pokeman(int hp, int totalHP, TinyAttack* primaryAttack, TinyAttack* secondaryAttack);
+	Pokeman(int hp, int totalHP, TinyAttack*, TinyAttack*, TinyAttack*, TinyAttack*);
+	Pokeman(int hp, int totalHP, TinyAttack*, TinyAttack*, TinyAttack*);
+	Pokeman(int hp, int totalHP, TinyAttack*, TinyAttack*);
+	Pokeman(int hp, int totalHP, TinyAttack*);
 	Pokeman(){};
 	int getHealth();
 	bool changeHealth(int power);
@@ -24,9 +27,12 @@ public:
 	TinyAttack *getAttack2();
 	TinyAttack *getAttack(int);
 	Pokeman* clone();
+	void usedAction(int);
+	int getLastAction();
 
 private:
-	int hp;
+	int hp;	
+	int lastAction;
 	int totalHP;
 	TinyAttack* attack[NUM_OF_ATTACKS];
 };

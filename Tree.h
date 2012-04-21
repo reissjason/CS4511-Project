@@ -16,11 +16,13 @@ public:
 	Tree(S* val);
 	virtual ~Tree();
 	void print();
+	void printClass();
 	void print(T* root, int depth);
+	void printClass(T* root, int depth);
 };
 
 template <class T, class S>
-Tree<T,S>::Tree(S* val) : T(val) {
+Tree<T,S>::Tree(S* val)  : T(val) {
 
 }
 
@@ -32,6 +34,11 @@ Tree<T,S>::~Tree() {
 template <class T, class S>
 void Tree<T,S>::print() {
 	print((T*)this, 0);
+}
+
+template <class T, class S>
+void Tree<T,S>::printClass() {
+        printClass((T*)this, 0);
 }
 
 template <class T, class S>
@@ -53,4 +60,25 @@ void Tree<T,S>::print(T* root, int depth) {
 		temp = temp->getNext();
 	}
 }
+
+template <class T, class S>
+void Tree<T,S>::printClass(T* root, int depth) {
+        if (root == NULL) return;
+
+        cout << "d: " << depth;
+
+        if (root->parent)
+                cout << " parent: " << (root->parent->getClassValue());
+        cout << endl;
+
+        cout << "node: " << (root->getClassValue()) << endl;
+
+        T* temp = root->getChildren();
+
+        while (temp != NULL) {
+                printClass(temp, depth+1);
+                temp = temp->getNext();
+        }
+}
+
 #endif /* TREE_H_ */

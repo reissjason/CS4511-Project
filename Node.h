@@ -23,8 +23,11 @@ public:
 	Node* getChildren();
 	Node* getParent();
 	Node* getNext();
+	Node* getRoot();
 	int compare(Node<T>&, Node<T>&);
 	T* getValue() { return value; }
+	Node<T>* getThis() { return this; }
+	int getClassValue() { return value->value; }
 	Node* parent;
 
 protected:
@@ -99,6 +102,15 @@ Node<T>* Node<T>::getLastChild() {
 template <class T>
 Node<T>* Node<T>::getParent() {
 	return this->parent;
+}
+
+template <class T>
+Node<T>* Node<T>::getRoot() {
+	Node<T>* temp = this;
+	while(temp->getParent() != NULL) {
+		temp = temp->getParent();
+	}
+        return temp;
 }
 
 template <class T>

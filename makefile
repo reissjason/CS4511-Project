@@ -35,10 +35,12 @@ tinyattack: TinyAttack.cpp TinyAttack.h
 
 state: State.cpp State.h pokeman
 	g++ -c State.cpp -o State.o
+state_tree_test: state tree_test state_tree_test.cpp
+	$(compiler) $(flags) -o"state_tree_test" state_tree_test.cpp debug_print.cpp State.o Pokeman.o TinyAttack.o
 
 # Other Targets
 clean:
-	-rm -fr *.o tree_test heap_test tiny_test
+	-rm -fr *.o tree_test heap_test tiny_test state_tree_test
 	-@echo ' '
 
 .PHONY: all clean dependents

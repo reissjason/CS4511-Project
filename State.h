@@ -18,10 +18,13 @@ public:
 	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
 	State(Pokeman *winner);
 	State* nextState();
+	State* nextState(int);
+	void print();
 	bool isOver;
 	Pokeman* myPokemon;
 	Pokeman* thatBastardsPokemon;
 	int whoseTurn;
+	int value;
 };
 
 #endif /* STATE_H_ */
