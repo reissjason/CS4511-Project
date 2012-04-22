@@ -28,6 +28,7 @@ public:
 	T* getValue() { return value; }
 	Node<T>* getThis() { return this; }
 	int getClassValue() { return value->value; }
+	bool hasChildren() { return children != NULL; }
 	Node* parent;
 
 protected:

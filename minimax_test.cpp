@@ -9,6 +9,7 @@
 #include <iostream>
 #include <cstdlib>
 
+
 #include "Tree.h"
 #include "Node.h"
 #include "minimax.h"
@@ -16,6 +17,7 @@
 using namespace std;
 
 int main(int args, char** argv) {
+
 	cout << "start Tree Test" << endl;
 
 	int i = 5;
@@ -39,7 +41,11 @@ int main(int args, char** argv) {
 		i--;
 	}
 
-	minimax(tree, )
+	int value = minimax(&tree);
+
+	tree.print();
+
+	cout << "minimax returned: " << value << endl;
 
 
 	cout << "done" << endl;

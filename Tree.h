@@ -45,13 +45,12 @@ template <class T, class S>
 void Tree<T,S>::print(T* root, int depth) {
 	if (root == NULL) return;
 
-	cout << "d: " << depth;
+	cout << " d: " << depth;
 
 	if (root->parent)
 		cout << " parent: " << *(root->parent->getValue());
-	cout << endl;
 
-	cout << "node: " << *(root->getValue()) << endl;
+	cout << " node: " << *(root->getValue());
 
 	T* temp = root->getChildren();
 
@@ -59,6 +58,8 @@ void Tree<T,S>::print(T* root, int depth) {
 		print(temp, depth+1);
 		temp = temp->getNext();
 	}
+
+	cout << endl;
 }
 
 template <class T, class S>
@@ -71,7 +72,7 @@ void Tree<T,S>::printClass(T* root, int depth) {
                 cout << " parent: " << (root->parent->getClassValue());
         cout << endl;
 
-        cout << "node: " << (root->getClassValue()) << endl;
+        cout << " node: " << (root->getClassValue()) << endl;
 
         T* temp = root->getChildren();
 

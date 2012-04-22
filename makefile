@@ -28,22 +28,22 @@ pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o
 	$(compiler) $(flags) -o pokeman_test pokeman_test.cpp tinyAttack.o pokeman.o
 
 pokeman.o: pokeman.cpp Pokeman.h
-	$(compiler) $(flags) -c pokemon.cpp
+	$(compiler) $(flags) -c pokeman.cpp
 
-minimax_test: minimax.cpp minimax_test.cpp
+minimax_test: minimax.cpp minimax_test.cpp Tree.h Node.h
 	$(compiler) $(flags) minimax_test.cpp minimax.cpp debug_print.cpp -o minimax_test
 
 tinyAttack.o: tinyAttack.cpp TinyAttack.h
 	g++ -c tinyAttack.cpp
 	
 tiny_test: pokeman tinyattack state
-	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp Pokeman.o TinyAttack.o State.o
+	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp pokeman.o tinyAttack.o State.o
 
-pokeman: Pokeman.cpp Pokeman.h tinyattack
-	g++ -c Pokeman.cpp -o Pokeman.o
+pokeman: pokeman.cpp Pokeman.h tinyattack
+	g++ -c pokeman.cpp -o Pokeman.o
 
-tinyattack: TinyAttack.cpp TinyAttack.h
-	g++ -c TinyAttack.cpp -o TinyAttack.o
+tinyattack: tinyAttack.cpp TinyAttack.h
+	g++ -c tinyAttack.cpp -o TinyAttack.o
 
 state: State.cpp State.h pokeman
 	g++ -c State.cpp -o State.o

@@ -22,6 +22,7 @@ public:
 	Pokeman(int hp, int totalHP, TinyAttack*);
 	Pokeman(){};
 	Pokeman(const Pokeman& p);
+	~Pokeman();
 	int getHealth();
 	bool changeHealth(int power);
 	TinyAttack *getAttack1();

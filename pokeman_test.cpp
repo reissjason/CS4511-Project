@@ -15,11 +15,12 @@ using namespace std;
 
 int main(int args, char** argv) {
 
-	TinyAttack t1("Cool Attack", 12);
-	TinyAttack t2("Hot Attack", 20);
+	TinyAttack *t1 = new TinyAttack("Cool Attack", 12);
+	TinyAttack *t2 = new TinyAttack("Hot Attack", 20);
 
 	Pokeman p(50, 70, t1, t2);
 
+	// Test copy constructor
 	Pokeman p2 = p;
 
 	p.print();

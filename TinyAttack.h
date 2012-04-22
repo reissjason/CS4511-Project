@@ -17,7 +17,7 @@ public:
   TinyAttack(string attackType, int attackDamage);
   TinyAttack();
   // Copy constructor
-  TinyAttack(const TinyAttack& ta) : type(ta.type), power(ta.power) { }
+  TinyAttack(const TinyAttack& ta) : power(ta.power) , type(ta.type) {}
   string getType();
   int getPower();
 

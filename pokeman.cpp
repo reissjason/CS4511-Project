@@ -6,7 +6,7 @@ Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2, 
         this->hp = hP;
         this->totalHP = totalHp;
         for(int i = 0; i < 4; i++){
-                this->attack[i] = new TinyAttack;
+                this->attack[i] = NULL;
         }
         this->attack[0] = attack1;
         this->attack[1] = attack2;
@@ -19,8 +19,8 @@ Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2, 
 Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2, TinyAttack* attack3){
         this->hp = hP;
         this->totalHP = totalHp;
-        for(int i = 0; i < 3; i++){
-                this->attack[i] = new TinyAttack;
+        for(int i = 0; i < 4; i++){
+                this->attack[i] = NULL;
         }
         this->attack[0] = attack1;
         this->attack[1] = attack2;
@@ -31,23 +31,30 @@ Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2, 
 Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1, TinyAttack* attack2){
 	this->hp = hP;
 	this->totalHP = totalHp;
-	for(int i = 0; i < 2; i++){
-		this->attack[i] = new TinyAttack;
+	for(int i = 0; i < 4; i++){
+		this->attack[i] = NULL;
 	}
 	this->attack[0] = attack1;
 	this->attack[1] = attack2;
 	this->lastAction = -1;
 }
+
 Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1){
         this->hp = hP;
         this->totalHP = totalHp;
         for(int i = 0; i < NUM_OF_ATTACKS; i++){
-                this->attack[i] = new TinyAttack;
+                this->attack[i] = NULL;
         }
         this->attack[0] = attack1;
 	this->lastAction = -1;
 }
 
+Pokeman::~Pokeman() {
+    for(int i = 0; i < NUM_OF_ATTACKS; i++){
+   		delete this->attack[i];
+   		this->attack[i] = NULL;
+    }
+}
 
 int Pokeman::getHealth(){
 	return this->hp;
@@ -70,7 +77,8 @@ TinyAttack* Pokeman::getAttack2(){
 }
 
 TinyAttack* Pokeman::getAttack(int i){
-	return this->attack[i-1]; //Minus 1 because it only makes sense to computer sciences to ask for attack number 0.
+	return this->attack[i-1]; //Minus 1 because it only makes sense to computer sciences to ask for attack number 0. But we are computer scientists. jsr
+								// btw: carl would be proud
 }
 
 bool Pokeman::changeHealth(int power){
@@ -89,4 +97,29 @@ Pokeman* Pokeman::clone(){
 	Pokeman* newPokeman = new Pokeman(myHP, myTotalHP, myAttack1, myAttack2);
 	return newPokeman;
 }
-// Copy constructorPokeman::Pokeman(const Pokeman& p) {	hp = p.hp;	totalHP = p.totalHP;	attack1 = p.attack1;	attack2 = p.attack2;}void Pokeman::print() {	cout << "Pokeman" << endl;	cout << "T hp: " << this->totalHP << endl;	cout << "hp: " << this->hp << endl;	cout << "att1: " << this->attack1.getType() << endl;	cout << "att2: " << this->attack2.getType() << endl;}/*void Pokeman::useAttack(TinyAttack attack){	string attackType = attack.getType();	cout << "Using attack type " + attackType << endl;	int attackPower = attack.getPower();	cout << "Attack has power: " + attackPower << endl;}*/
+
+// Copy constructor
+Pokeman::Pokeman(const Pokeman& p) {
+	hp = p.hp;
+	totalHP = p.totalHP;
+
+	cout << "Copy attacks" << endl;
+	for (int i=0; i < 4; i++ ) {
+		if (p.attack[i] != NULL) {
+			string str;
+			str = p.attack[i]->getType();
+			attack[i] = new TinyAttack(str, p.attack[i]->getPower());
+		}
+		else attack[i] = NULL;
+	}
+}
+
+void Pokeman::print() {
+	cout << "Pokeman" << endl;
+	cout << "T hp: " <<
+	this->totalHP << endl;
+	cout << "hp: " << this->hp << endl;
+	cout << "att1: " << this->getAttack(1)->getType() << endl;
+	cout << "att2: " << this->getAttack(2)->getType() << endl;
+	cout << "done print" << endl;
+}
