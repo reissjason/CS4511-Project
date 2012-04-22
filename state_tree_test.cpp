@@ -116,7 +116,7 @@ int main(int args, char** argv) {
 		generateSuccessors(newStateNode);
 	}
 	tree.printClass();
-	GBFS(tree.getThis());
+	GBFS(&tree);
 	return i;
 }
 
