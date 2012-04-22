@@ -41,6 +41,8 @@ int main(int args, char** argv) {
 		i--;
 	}
 
+	cout << tree << " = " << tree.getThis() << endl;
+
 	int value = minimax(&tree);
 
 	tree.print();
