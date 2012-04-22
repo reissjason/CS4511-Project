@@ -17,7 +17,7 @@ class State {
 public: 
 	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
 	State(Pokeman *winner);
-	State* nextState();
+//	State* nextState();
 	State* nextState(int);
 	void print();
 	bool isOver;

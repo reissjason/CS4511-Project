@@ -19,6 +19,7 @@
 #define USE_ATTACK_4 4
 #define SWITCH 5
 #define NUM_OF_ACTIONS 2
+#define INVALID -2
 
 using namespace std;
 
@@ -31,11 +32,15 @@ void generateSuccessors(Node<State>* parent){
 	int selectedAction;
 	for(selectedAction = USE_ATTACK_1; selectedAction <= NUM_OF_ACTIONS; selectedAction++) {
 		State* nextState = parent->getValue()->nextState(selectedAction);
-		Node<State>* child = new Node<State>(nextState);
-		parent->addChild(child);
-		if(!child->getValue()->isOver) {
-			generateSuccessors(child);
-		}
+		if (nextState != NULL) {
+			Node<State>* child = new Node<State>(nextState);
+			if( child->getValue()->whoseTurn != INVALID){
+				parent->addChild(child);
+				if(!child->getValue()->isOver) {
+					generateSuccessors(child);
+				}
+			}	
+		}	
 	}
 }
 
@@ -58,7 +63,7 @@ void GBFS(Node<State>* root){
 		}
 		children = children->getNext();
 	}
-	cout << "The best move is-----------------" << endl;
+	cout << "----------------------------------------------The best move is---------------------------------------------------------"  << endl;
 	bestChild->getValue()->print();
 	GWFS(bestChild);
 }
@@ -82,7 +87,7 @@ void GWFS(Node<State>* root){
                 }
                 children = children->getNext();
         }
-        cout << "The best move is-----------------" << endl;
+        cout << "----------------------------------------------The best move is---------------------------------------------------------" << endl;
         bestChild->getValue()->print();
         GBFS(bestChild);
 }
@@ -93,29 +98,25 @@ int main(int args, char** argv) {
 	int selectedAction = USE_ATTACK_1;
 	int value;
 	bool done = false;
-	TinyAttack* ta1 = new TinyAttack("damage", -20);
-	TinyAttack* ta2 = new TinyAttack("damage", -10);
-	Pokeman* p1 = new Pokeman(25, 25, ta1, ta2);
-	Pokeman* p2 = p1->clone();
+	TinyAttack* ta1 = new TinyAttack("damage", -3, 5);
+	TinyAttack* ta2 = new TinyAttack("heal", 4, 5);
+	Pokeman* p1 = new Pokeman(5, 5, ta1, ta2);
+	Pokeman* p2 = new Pokeman(*p1);
+	p1->print();
+	p2->print();
 	State* state = new State(p1,p2,0);
 	Tree<Node<State>,State> tree(state);
-	/*while (!state->isOver){
-		for(selectedAction = USE_ATTACK_1; selectedAction <= NUM_OF_ACTIONS; selectedAction++){
-			cout << "Action " << selectedAction << endl;
-			State* nextState = state->nextState(selectedAction);
-			state = nextState;
-			Node<State>* newStateNode = new Node<State>(nextState);
-			cout << "TTTTTTTTTTTTEEEEEEEEEEEESSSSSSSSSSSSSSTTTTTTTTTTTTT: " << newStateNode->getValue()->value << endl;
-			tree.addChild(newStateNode);
-		}
-	}*/
-	for(selectedAction = USE_ATTACK_1; selectedAction <= NUM_OF_ACTIONS; selectedAction++){
+	
+	/*for(selectedAction = USE_ATTACK_1; selectedAction <= NUM_OF_ACTIONS; selectedAction++){
 		State* nextState = state->nextState(selectedAction);
 		Node<State>* newStateNode = new Node<State>(nextState);
 		tree.addChild(newStateNode);
 		generateSuccessors(newStateNode);
-	}
-	tree.printClass();
+	}*/
+	generateSuccessors(tree.getThis());
+	//tree.printClass();
+	cout << "Starting State" << endl;
+	state->print();
 	GBFS(tree.getThis());
 	return i;
 }

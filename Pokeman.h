@@ -29,7 +29,7 @@ public:
 	TinyAttack *getAttack2();
 	TinyAttack *getAttack(int);
 	Pokeman* clone();
-	void usedAction(int);
+	bool usedAction(int);
 	int getLastAction();
 
 	void print();

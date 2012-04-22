@@ -16,7 +16,7 @@ int main(int args, char** argv) {
 	int i = 0;
 	string damage = "damage";
 	int power;
-	TinyAttack* ta = new TinyAttack(damage, -5);
+	TinyAttack* ta = new TinyAttack(damage, -5, 5);
 	cout << "****************TINY*ATTACK*CREATED*******************" << endl;
 	power = ta->getPower();
 	cout << "****************TINY*ATTACK*TYPE: " + ta->getType() + "*********" << endl;
@@ -31,7 +31,7 @@ int main(int args, char** argv) {
 		cout << "****************POKEMAN*ATTACK*"<< i << "*POWER: " << p->getAttack(i)->getPower() << "*********************************" << endl;
 	}
 	cout << "************************CLONING*TEH*POKEMANS*******************************" << endl;
-	Pokeman* clone = p->clone();
+	Pokeman* clone = new Pokeman(*p);
 	cout << "************************CLONING*COMPLETE*******************************" << endl;
 	cout << "****************POKEMAN*HEALTH: " << clone->getHealth() << "*********************" << endl;
         for(i=1; i < 3; i++){
@@ -45,12 +45,18 @@ int main(int args, char** argv) {
 	}
 	cout << "************************TEH*CLONE'S*HEALTH: " << clone->getHealth() << "***********************" << endl;
 	cout << "***********************TEH*ORIGINAL'S*HEALTH: " << p->getHealth() << "***************************" << endl;
-	cout << "**************************BEGINNING*STATE*TEST***************ALABAMA,ALASKA,ARIZONA,ARKANSAS,CALIFORNIA,COLORADO,CONNETICUT..." << endl;
-	State* s = new State(p, clone, 1);
-	while(!s->isOver){
-	State* tempState = s->nextState();
+	
+	cout << "**************************************************************************************************" << endl;
+	
+	p->usedAction(1);
+	p->print();
+	clone->print();
+//	cout << "**************************BEGINNING*STATE*TEST***************ALABAMA,ALASKA,ARIZONA,ARKANSAS,CALIFORNIA,COLORADO,CONNETICUT..." << endl;
+//	State* s = new State(p, clone, 1);
+//	while(!s->isOver){
+//	State* tempState = s->nextState(1);
 	//Delete State attached to s?
-	s = tempState;
-	}
+//	s = tempState;
+//	}
 	return i;
 }

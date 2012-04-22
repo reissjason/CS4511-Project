@@ -40,15 +40,15 @@ tiny_test: pokeman tinyattack state
 	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp pokeman.o tinyAttack.o State.o
 
 pokeman: pokeman.cpp Pokeman.h tinyattack
-	g++ -c pokeman.cpp -o Pokeman.o
+	g++ -c pokeman.cpp -o pokeman.o
 
 tinyattack: tinyAttack.cpp TinyAttack.h
-	g++ -c tinyAttack.cpp -o TinyAttack.o
+	g++ -c tinyAttack.cpp -o tinyAttack.o
 
 state: State.cpp State.h pokeman
 	g++ -c State.cpp -o State.o
-state_tree_test: state tree_test state_tree_test.cpp
-	$(compiler) $(flags) -o"state_tree_test" state_tree_test.cpp debug_print.cpp State.o Pokeman.o TinyAttack.o
+state_tree_test: state tree_test state_tree_test.cpp pokeman tinyattack
+	$(compiler) $(flags) -o"state_tree_test" state_tree_test.cpp debug_print.cpp State.o pokeman.o tinyAttack.o
 
 # Other Targets
 clean:
