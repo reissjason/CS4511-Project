@@ -1,14 +1,21 @@
 #include "State.h"
+#include "Tree.h"
+#include "Node.h"
 #include <string>
 #include <ctime>
 #include <stdlib.h>
 #include <iostream>
 
+#define USE_ATTACK_1 1
+#define USE_ATTACK_2 2
+#define USE_ATTACK_3 3
+#define USE_ATTACK_4 4
+#define SWITCH 5
+#define NUM_OF_ACTIONS 5 
 #define MATCH_OVER -1
 #define INVALID -2
 #define MY_TURN 0
 #define THAT_BASTARDS_TURN 1
-#define SWITCH 5
 
 int stateEval(State*);
 
@@ -79,23 +86,30 @@ State* State::nextState(int selectedAction){
 	}
 	if (selectedAction == SWITCH) {
 		cout << "Switching not currently implemented" << endl;
+		newState = new State(myNewPokeman, hisNewPokeman, INVALID);
 	}
 	else {
-		usedAction = active->usedAction(selectedAction);
-		if(!usedAction){//active->getAttack(selectedAction)->getPP() == 0 ) {
+		if(active->getAttack(selectedAction) != NULL) {
+			usedAction = active->usedAction(selectedAction);
+			if(!usedAction){//active->getAttack(selectedAction)->getPP() == 0 ) {
+				newState = new State(myNewPokeman, hisNewPokeman, INVALID);
+				return newState;
+			}
+			else {
+				action = active->getAttack(selectedAction)->getType();
+				if(action.compare("damage") == 0) {
+					continueMatch = useAttack(passive, active->getAttack(selectedAction));
+				}
+				else if (action.compare("heal") == 0) {
+					continueMatch = useAttack(active, active->getAttack(selectedAction));
+				}
+			}
+		
+		}
+		else {
 			newState = new State(myNewPokeman, hisNewPokeman, INVALID);
 			return newState;
 		}
-		else {
-			action = active->getAttack(selectedAction)->getType();
-			if(action.compare("damage") == 0) {
-				continueMatch = useAttack(passive, active->getAttack(selectedAction));
-			}
-			else if (action.compare("heal") == 0) {
-				continueMatch = useAttack(active, active->getAttack(selectedAction));
-			}
-		}
-		
 	}
         if(continueMatch){
         newState = new State(myNewPokeman, hisNewPokeman, (this->whoseTurn + 1) % 2);
@@ -114,7 +128,11 @@ int stateEval(State* state){
         }
         int myHealth = state->myPokemon->getHealth();
         int hisHealth = state->thatBastardsPokemon->getHealth();
-        return myHealth - hisHealth;
+	int myMax = state->myPokemon->getMaxHealth();
+	int hisMax = state->thatBastardsPokemon->getMaxHealth();
+	int myHealthPercent = myHealth/(myMax * 1.0) * 100;
+	int hisHealthPercent = hisHealth/(hisMax * 1.0) * 100;
+        return myHealthPercent - hisHealthPercent;
 }
 
 void State::print(){
