@@ -62,6 +62,10 @@ int Pokeman::getHealth(){
 	return this->hp;
 }
 
+int Pokeman::getMaxHealth(){
+	return this->totalHP;
+}
+
 int Pokeman::getLastAction(){
 	return this->lastAction;
 }
@@ -132,9 +136,13 @@ void Pokeman::print() {
 	this->totalHP << endl;
 	cout << "hp: " << this->hp << endl;
 	cout << "*******************" << endl;
-	this->getAttack(1)->print();
+	int i = 1;
+	while (this->getAttack(i) != NULL && i < 5){
+	this->getAttack(i)->print();
 	cout << "*******************" << endl;
-	this->getAttack(2)->print();
-	cout << "*******************" << endl;
+	i++;
+	}
+//	this->getAttack(2)->print();
+//	cout << "*******************" << endl;
 	cout << "done print" << endl;
 }

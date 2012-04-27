@@ -7,6 +7,8 @@
 
 #include "TinyAttack.h"
 #include "Pokeman.h"
+#include "Tree.h"
+#include "Node.h"
 
 using namespace std;
 

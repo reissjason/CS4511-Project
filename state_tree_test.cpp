@@ -99,20 +99,14 @@ int main(int args, char** argv) {
 	int value;
 	bool done = false;
 	TinyAttack* ta1 = new TinyAttack("damage", -3, 5);
-	TinyAttack* ta2 = new TinyAttack("heal", 4, 5);
-	Pokeman* p1 = new Pokeman(5, 5, ta1, ta2);
+	TinyAttack* ta2 = new TinyAttack("heal", 4, 2);
+	Pokeman* p1 = new Pokeman(5, 5, ta1, ta2, ta1, ta1);
 	Pokeman* p2 = new Pokeman(*p1);
 	p1->print();
 	p2->print();
 	State* state = new State(p1,p2,0);
 	Tree<Node<State>,State> tree(state);
 	
-	/*for(selectedAction = USE_ATTACK_1; selectedAction <= NUM_OF_ACTIONS; selectedAction++){
-		State* nextState = state->nextState(selectedAction);
-		Node<State>* newStateNode = new Node<State>(nextState);
-		tree.addChild(newStateNode);
-		generateSuccessors(newStateNode);
-	}*/
 	generateSuccessors(tree.getThis());
 	//tree.printClass();
 	cout << "Starting State" << endl;

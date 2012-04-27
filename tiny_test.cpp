@@ -51,6 +51,8 @@ int main(int args, char** argv) {
 	p->usedAction(1);
 	p->print();
 	clone->print();
+	Pokeman* newPoke = new Pokeman(10, 10, ta, ta, ta, ta);
+	newPoke->print();
 //	cout << "**************************BEGINNING*STATE*TEST***************ALABAMA,ALASKA,ARIZONA,ARKANSAS,CALIFORNIA,COLORADO,CONNETICUT..." << endl;
 //	State* s = new State(p, clone, 1);
 //	while(!s->isOver){
