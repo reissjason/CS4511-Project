@@ -33,19 +33,25 @@ int main(int args, char** argv) {
 		Node<int>* n = new Node<int>(in);
 		tree.addChild(n);
 
-		for (int j = 0; j < 3; j++) {
+		for (int j = 0; j < 2; j++) {
 			int* inn = new int(rand()%100);
 			Node<int>* m = new Node<int>(inn);
 			n->addChild(m);
+
+			for (int x = 0; x < 2; x++) {
+				int* inn = new int(rand()%100);
+				Node<int>* mm = new Node<int>(inn);
+				m->addChild(mm);
+			}
 		}
 		i--;
 	}
 
-	int value = minimax(&tree);
+	Node<int>* value = minimax<Node<int> > (&tree);
 
 	tree.print();
-
-	cout << "minimax returned: " << value << endl;
+       
+	cout << "minimax returned: " << *value->getValue() << endl;
 
 
 	cout << "done" << endl;

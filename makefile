@@ -30,8 +30,8 @@ pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o
 pokeman.o: pokeman.cpp Pokeman.h
 	$(compiler) $(flags) -c pokeman.cpp
 
-minimax_test: minimax.cpp minimax_test.cpp Tree.h Node.h
-	$(compiler) $(flags) minimax_test.cpp minimax.cpp debug_print.cpp -o minimax_test
+minimax_test: minimax.h minimax_test.cpp Tree.h Node.h
+	$(compiler) $(flags) minimax_test.cpp debug_print.cpp -o minimax_test
 
 tinyAttack.o: tinyAttack.cpp TinyAttack.h
 	$(compiler) $(flags) -c tinyAttack.cpp
