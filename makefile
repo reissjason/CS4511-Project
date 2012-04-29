@@ -35,6 +35,9 @@ minimax_test: minimax.cpp minimax_test.cpp Tree.h Node.h
 
 tinyAttack.o: tinyAttack.cpp TinyAttack.h
 	$(compiler) $(flags) -c tinyAttack.cpp
+
+tiny_attack_test: tiny_attack_test.cpp tinyAttack.o debug_print.o
+	$(compiler) $(flags) -o"tiny_attack_test" tiny_attack_test.cpp tinyAttack.o debug_print.o
 	
 tiny_test: pokeman tinyattack state
 	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp pokeman.o tinyAttack.o State.o
@@ -49,6 +52,12 @@ state: State.cpp State.h pokeman
 	$(compiler) $(flags) -c State.cpp -o State.o
 state_tree_test: state tree_test state_tree_test.cpp pokeman tinyattack
 	$(compiler) $(flags) -o"state_tree_test" state_tree_test.cpp debug_print.cpp State.o pokeman.o tinyAttack.o
+
+turn: Turn.cpp Turn.h state
+	$(compiler) $(flags) -c Turn.cpp -o Turn.o
+
+turn_test: turn_test.cpp turn turn_minimax.cpp 
+	$(compiler) $(flags) -o"turn_test" turn_test.cpp debug_print.cpp turn_minimax.cpp State.o pokeman.o tinyAttack.o Turn.o 
 
 # Other Targets
 clean:

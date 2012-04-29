@@ -12,6 +12,7 @@
 #include "Tree.h"
 #include "Node.h"
 #include "State.h"
+#include "minimax.h"
 
 #define USE_ATTACK_1 1
 #define USE_ATTACK_2 2
@@ -98,8 +99,8 @@ int main(int args, char** argv) {
 	int selectedAction = USE_ATTACK_1;
 	int value;
 	bool done = false;
-	TinyAttack* ta1 = new TinyAttack("damage", -3, 5);
-	TinyAttack* ta2 = new TinyAttack("heal", 4, 2);
+	TinyAttack* ta1 = new TinyAttack("damage", -3, 5, 3);
+	TinyAttack* ta2 = new TinyAttack("heal", 4, 2, 3);
 	Pokeman* p1 = new Pokeman(5, 5, ta1, ta2, ta1, ta1);
 	Pokeman* p2 = new Pokeman(*p1);
 	p1->print();
@@ -112,10 +113,12 @@ int main(int args, char** argv) {
 	cout << "Starting State" << endl;
 	state->print();
 	GBFS(tree.getThis());
+	cout << "---------------END GBWFS ------------------------" << endl;
+//	cout << "Minimax: " << minimax(tree.getThis()) << endl;
 	return i;
 }
 
-int StateEval(State* state){
+/*int StateEval(State* state){
 	if(state == NULL){
 		cout << "Null state provided to State Evaluation function" << endl;
 		return -1;
@@ -124,4 +127,4 @@ int StateEval(State* state){
 	int hisHealth = state->thatBastardsPokemon->getHealth();
 	return myHealth - hisHealth;
 
-}
+}*/

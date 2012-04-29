@@ -31,6 +31,7 @@ public:
 	TinyAttack *getAttack(int);
 	Pokeman* clone();
 	bool usedAction(int);
+	bool isAlive();
 	int getLastAction();
 
 	void print();

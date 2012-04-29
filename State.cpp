@@ -17,9 +17,6 @@
 #define MY_TURN 0
 #define THAT_BASTARDS_TURN 1
 
-int stateEval(State*);
-
-
 State::State(Pokeman* pokeman1, Pokeman* pokeman2, int turn){
 	this->myPokemon = pokeman1;
 	this->thatBastardsPokemon = pokeman2;
@@ -35,7 +32,7 @@ State::State(Pokeman* pokeman1, Pokeman* pokeman2, int turn){
 		this->whoseTurn = turn;
 		this->isOver = false;
 	}
-	this->value = stateEval(this);
+	this->value = this->stateEval();
 }
 
 State::State(Pokeman* winner){
@@ -70,17 +67,8 @@ State* State::nextState(int selectedAction){
         if(this->whoseTurn == MY_TURN && selectedAction != SWITCH){
 		active = myNewPokeman;
 		passive = hisNewPokeman;
-/*		myNewPokeman->usedAction(used);
-		action = myNewPokeman->getAttack(selectedAction)->getType();
-		if(action.compare("damage") == 0) {
-			continueMatch = useAttack(hisNewPokeman, myNewPokeman->getAttack(selectedAction));
-		}
-*/
 	}
         else if(selectedAction != SWITCH){
-/*		hisNewPokeman->usedAction(used);
-                continueMatch = useAttack(myNewPokeman, hisNewPokeman->getAttack(selectedAction));
-*/
 		active = hisNewPokeman;
 		passive = myNewPokeman;
 	}
@@ -121,15 +109,15 @@ State* State::nextState(int selectedAction){
         return newState;
 }
 
-int stateEval(State* state){
-        if(state == NULL){
+int State::stateEval(){
+        if(this == NULL){
                 cout << "Null state provided to State Evaluation function" << endl;
                 return -1000000000;
         }
-        int myHealth = state->myPokemon->getHealth();
-        int hisHealth = state->thatBastardsPokemon->getHealth();
-	int myMax = state->myPokemon->getMaxHealth();
-	int hisMax = state->thatBastardsPokemon->getMaxHealth();
+        int myHealth = this->myPokemon->getHealth();
+        int hisHealth = this->thatBastardsPokemon->getHealth();
+	int myMax = this->myPokemon->getMaxHealth();
+	int hisMax = this->thatBastardsPokemon->getMaxHealth();
 	int myHealthPercent = myHealth/(myMax * 1.0) * 100;
 	int hisHealthPercent = hisHealth/(hisMax * 1.0) * 100;
         return myHealthPercent - hisHealthPercent;

@@ -19,9 +19,11 @@ class State {
 public: 
 	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
 	State(Pokeman *winner);
-//	State* nextState();
 	State* nextState(int);
+	int stateEval();
 	void print();
+	Pokeman* getActivePokemon();
+	Pokeman* getPassivePokemon();
 	bool isOver;
 	Pokeman* myPokemon;
 	Pokeman* thatBastardsPokemon;

@@ -51,6 +51,11 @@ Pokeman::Pokeman(int hP, int totalHp, TinyAttack* attack1){
 	this->lastAction = -1;
 }
 
+bool Pokeman::isAlive() {
+	if(this->getHealth() > 0) { return true; }
+	else return false;
+}
+
 Pokeman::~Pokeman() {
     for(int i = 0; i < NUM_OF_ATTACKS; i++){
    		delete this->attack[i];
