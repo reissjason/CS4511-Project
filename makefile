@@ -24,8 +24,8 @@ pkmn:	pkmn.cpp pkmn.h attack.o
 attack:	attack.cpp attack.h
 	$(compiler) $(flags) -c attack.cpp -o attack.o
 
-pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o
-	$(compiler) $(flags) -o pokeman_test pokeman_test.cpp tinyAttack.o pokeman.o
+pokeman_test: pokeman_test.cpp tinyAttack.o pokeman.o debug_print.o
+	$(compiler) $(flags) -o pokeman_test pokeman_test.cpp tinyAttack.o pokeman.o debug_print.o
 
 pokeman.o: pokeman.cpp Pokeman.h
 	$(compiler) $(flags) -c pokeman.cpp
@@ -50,6 +50,10 @@ tinyattack: tinyAttack.cpp TinyAttack.h
 
 state: State.cpp State.h pokeman
 	$(compiler) $(flags) -c State.cpp -o State.o
+
+state_test: state state_test.cpp pokeman.o debug_print.o
+	$(compiler) $(flags) -o"state_test" state_test.cpp debug_print.o State.o pokeman.o tinyAttack.o
+
 state_tree_test: state tree_test state_tree_test.cpp pokeman tinyattack
 	$(compiler) $(flags) -o"state_tree_test" state_tree_test.cpp debug_print.cpp State.o pokeman.o tinyAttack.o
 
