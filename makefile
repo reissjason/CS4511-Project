@@ -65,7 +65,7 @@ turn_test: turn_test.cpp turn turn_minimax.cpp
 
 # Other Targets
 clean:
-	-rm -fr *.o *_test
+	-rm -fr *.o *_test *.out.txt
 
 .PHONY: all clean dependents
 

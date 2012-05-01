@@ -16,6 +16,8 @@ using namespace std;
 class Turn {
 public:
 	Turn(State *, State *);
+	Turn(int*);
+	~Turn();
 	Turn * next(int, int);
 	void print();
 	bool isOver();

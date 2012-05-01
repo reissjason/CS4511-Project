@@ -26,6 +26,8 @@ public:
 	Node* getRoot();
 	int compare(Node<T>&, Node<T>&);
 	T* getValue() { return value; }
+	int getMinimaxValue() {return *minimaxValue;}
+	void setMinimaxValue(int *i);
 	Node<T>* getThis() { return this; }
 	int getClassValue() { return value->getValue(); }
 	bool hasChildren() { return children != NULL; }
@@ -34,7 +36,7 @@ public:
 protected:
 	T* value;
 	Node* getLastChild();
-
+	int* minimaxValue;
 	Node* next;
 	Node* children;
 };
@@ -45,6 +47,7 @@ Node<T>::Node() {
 	this->value = NULL;
 	this->next = NULL;
 	this->parent = NULL;
+	this->minimaxValue = new int(0);
 }
 
 template <class T>
@@ -54,7 +57,13 @@ Node<T>::Node(T* value) {
 	this->value = value;
 	this->next = NULL;
 	this->parent = NULL;
+	this->minimaxValue = new int(0);
 	dprint("node constructed", 4);
+}
+
+template <class T>
+void Node<T>::setMinimaxValue(int *i) {
+	*minimaxValue = *i;
 }
 
 template <class T>

@@ -76,7 +76,7 @@ int Pokeman::getLastAction(){
 }
 
 bool Pokeman::usedAction(int i) {
-	if(this->getAttack(i)->getPP() > 0){
+	if(this->getAttack(i)->getPP() > 0 && this->isAlive()){
 		this->lastAction = i;
 		this->getAttack(i)->use();
 		return true;

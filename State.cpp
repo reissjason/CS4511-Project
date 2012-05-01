@@ -35,6 +35,15 @@ State::State(Pokeman* pokeman1, Pokeman* pokeman2, int turn){
 	this->value = this->stateEval();
 }
 
+State::State(int *i) {
+	this->value = *i;
+}
+
+State::~State() {
+	delete this->myPokemon;
+	delete this->thatBastardsPokemon;
+}
+
 State::State(Pokeman* winner){
 	this->myPokemon = winner;
 	this->isOver = true;
@@ -95,7 +104,7 @@ State* State::nextState(int selectedAction){
 	else {
 		if(active->getAttack(selectedAction) != NULL) {
 			usedAction = active->usedAction(selectedAction);
-			if(!usedAction){//active->getAttack(selectedAction)->getPP() == 0 ) {
+			if(!usedAction){
 				newState = new State(myNewPokeman, hisNewPokeman, INVALID);
 				return newState;
 			}
@@ -119,9 +128,6 @@ State* State::nextState(int selectedAction){
         newState = new State(myNewPokeman, hisNewPokeman, (this->whoseTurn + 1) % 2);
         }
         else newState = new State(myNewPokeman, hisNewPokeman, MATCH_OVER);
-        hisHealth = hisNewPokeman->getHealth();
-        myHealth = myNewPokeman->getHealth();
-//	newState->print();
         return newState;
 }
 

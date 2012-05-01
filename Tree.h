@@ -73,7 +73,7 @@ void Tree<T,S>::printClass(T* root, int depth) {
         cout << endl;
 
         cout << " node: " << (root->getClassValue()) << endl;
-
+	
         T* temp = root->getChildren();
 
         while (temp != NULL) {
