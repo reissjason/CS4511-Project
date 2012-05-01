@@ -1,6 +1,8 @@
 #ifndef PKMN_H
 #define PKMN_H
 
+using namespace std;
+
 #include <iostream>
 #include <string>
 #include <math.h>
@@ -8,12 +10,25 @@
 
 class pkmn {
 public:
-  pkmn(string p_name, int * p_stats, string * p_types, string p_ability);
+  pkmn(string p_name, int * p_stats, string p_type1, string p_type2, string p_ability);
+  pkmn(const pkmn &pkmn);
   string get_name();
-  int * get_stat();
-  string * get_type();
+  int get_stat(int i);
+  int get_stat_increase(int i);
+  int get_current_hp();
+  string get_type(int i);
   string get_ability();
+  string get_item();
+  string get_status();
+  bool get_charge();
+
+  string get_attack(int attack_num);
+  
   struct attack_list get_attack_head();
+
+  void update_hp(int new_hp);
+
+  void set_attacks(string p_attack1, string p_attack2, string p_attack3, string p_attack4);
   void change_type(string type1, string type2);
   void add_possible_attack(attack * atk);
   void add_known_attack(attack * atk);
@@ -35,6 +50,10 @@ private:
   };
   attack_list* pos_atk_head;
   attack_list* known_atk_head;
+  string attack1;
+  string attack2;
+  string attack3;
+  string attack4;
   string item;
   bool charge; //to be used in damage calculation
   //::TODO:: add a flashfire modifier?
