@@ -23,6 +23,7 @@ public:
 	Pokeman(){};
 	Pokeman(const Pokeman& p);
 	~Pokeman();
+	bool equals(Pokeman& p);
 	int getHealth();
 	int getMaxHealth();
 	bool changeHealth(int power);

@@ -46,6 +46,22 @@ bool useAttack(Pokeman* targetPokeman, TinyAttack* attack){
 	return stillAlive;
 }
 
+Pokeman* State::getActivePokemon(){
+	switch(this->whoseTurn) {
+		case MY_TURN: return this->myPokemon;
+		case THAT_BASTARDS_TURN: return this->thatBastardsPokemon;
+		default: cout << "Attempting to get active pokemon on invalid state." << endl;
+	}
+}
+
+Pokeman* State::getPassivePokemon(){
+        switch(this->whoseTurn) {
+                case MY_TURN: return this->thatBastardsPokemon;
+                case THAT_BASTARDS_TURN: return this->myPokemon;
+                default: cout << "Attempting to get passive pokemon on invalid state." << endl;
+        }
+}
+
 State* State::nextState(int selectedAction){
 	if(selectedAction > SWITCH || selectedAction < 0) {
 		cout << "nextState() function called with improper value for Selected Action: " << selectedAction << endl;

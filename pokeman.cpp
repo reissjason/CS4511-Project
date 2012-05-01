@@ -58,7 +58,7 @@ bool Pokeman::isAlive() {
 
 Pokeman::~Pokeman() {
     for(int i = 0; i < NUM_OF_ATTACKS; i++){
-   		delete this->attack[i];
+   		delete this->attack[i]; //This causes problems since the Pokema might not "own" those attacks. They're pointers, not references.
    		this->attack[i] = NULL;
     }
 }
@@ -133,6 +133,15 @@ Pokeman::Pokeman(const Pokeman& p) {
 		}
 		else attack[i] = NULL;
 	}
+}
+
+bool Pokeman::equals(Pokeman& p) {
+	if(this->getMaxHealth() != p.getMaxHealth()) {return false; }
+	if (this->getHealth() != p.getHealth()) {return false;}
+	for (int i = 1; i < 5; i++){
+		if (!this->getAttack(i)->equals(p.getAttack(i))) {return false;}
+	}
+	return true;
 }
 
 void Pokeman::print() {
