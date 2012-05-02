@@ -53,6 +53,22 @@ void generateSuccessors(Node<Turn>* parent, int depth) {
 		}
 	}
 }
+
+State *buildAnswer(Node<Turn>* parent, int minimaxValue) {
+	Node<Turn>* temp = parent->getChildren();
+	State *ans;
+	while(temp != NULL) {
+		if(temp->getMinimaxValue() == minimaxValue) {
+			if (temp->getValue()->getState1()->getActivePokemon()->equals(*temp->getValue()->getState1()->myPokemon)){
+				ans = new State(*temp->getValue()->getState1());
+			}
+			else ans = new State(*temp->getValue()->getState2());
+			return ans;
+		}
+	temp = temp->getNext();
+	}
+}
+
 int main(int args, char** argv) {
 	TinyAttack* ta = new TinyAttack("damage", -12, 2, 2);
 	TinyAttack* ta2 = new TinyAttack("damage", -14, 2, 3);
@@ -69,23 +85,21 @@ int main(int args, char** argv) {
 	State *s = new State(p, p2, 0);
 	State *s2 = new State(p3, p4, 1);
 	Turn *t = new Turn(s, s2);
-	//t->print();
-	State *newS = s->nextState(1);
-	State *newS2 = newS->nextState(2);
-	Turn *newT = new Turn(newS, newS2);
-	//newT->print();
 	cout << "*********************************************************************************************************************" << endl;
 	//t->next(1,2)->print();
 	Tree<Node<Turn>, Turn> tree(t);
 	generateSuccessors(&tree, 0);
 	tree.printClass();
-	cout << "Minimax Returns: " << turn_minimax(&tree) << endl;
-	Node<Turn>* temp = tree.getChildren();
-	while(temp != NULL) {
-		cout << "Minimax Value: " << endl;
-		cout << temp->getMinimaxValue() << endl;
-		temp = temp->getNext();
-	}
-
+	int minimaxValue = turn_minimax(&tree);
+	cout << "Minimax Returns: " << minimaxValue << endl;
+	State* minimaxRecommends = buildAnswer(&tree, minimaxValue);
+	cout << "MINIMAX RECOMMENDS: " << minimaxRecommends->getActionUsed() << endl;
+	delete t;
+	delete s2;
+	delete s;
+	//delete p4;
+	//delete p3;
+	//delete p2;
+	//delete p;
 	return 1;
 }

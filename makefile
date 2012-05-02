@@ -63,6 +63,9 @@ turn: Turn.cpp Turn.h state
 turn_test: turn_test.cpp turn turn_minimax.cpp 
 	$(compiler) $(flags) -o"turn_test" turn_test.cpp debug_print.cpp turn_minimax.cpp State.o pokeman.o tinyAttack.o Turn.o 
 
+ui: turn ui.cpp debug_print.o
+	$(compiler) $(flags) -o"go" ui.cpp debug_print.o turn_minimax.cpp State.o pokeman.o tinyAttack.o Turn.o
+
 # Other Targets
 clean:
 	-rm -fr *.o *_test *.out.txt

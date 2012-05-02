@@ -57,10 +57,10 @@ bool Pokeman::isAlive() {
 }
 
 Pokeman::~Pokeman() {
-    for(int i = 0; i < NUM_OF_ATTACKS; i++){
-   		delete this->attack[i]; //This causes problems since the Pokema might not "own" those attacks. They're pointers, not references.
-   		this->attack[i] = NULL;
-    }
+    //for(int i = 0; i < NUM_OF_ATTACKS; i++){
+   		delete[] this->attack; //This causes problems since the Pokema might not "own" those attacks. They're pointers, not references.
+   //		this->attack[i] = NULL;
+    //}
 }
 
 int Pokeman::getHealth(){

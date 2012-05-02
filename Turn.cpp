@@ -24,9 +24,18 @@ Turn::Turn(int *i) {
 }
 
 Turn::~Turn(){
-	delete this->state1;
-	delete this->state2;
+	this->state1 = NULL;
+	this->state2 = NULL;
 }
+
+State *Turn::getState1(){
+	return this->state1;
+}
+
+State *Turn::getState2(){
+        return this->state2;
+}
+
 
 bool Turn::isOver() {
 	if(this->state2->myPokemon->isAlive() && this->state2->thatBastardsPokemon->isAlive())

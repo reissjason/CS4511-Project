@@ -19,6 +19,7 @@ class State {
 public: 
 	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
 	State(Pokeman *winner);
+	State(State &s);
 	State(int *);
 	State* nextState(int);
 	~State();
@@ -31,6 +32,10 @@ public:
 	Pokeman* thatBastardsPokemon;
 	int whoseTurn;
 	int value;
+	void setActionUsed(int);
+	int getActionUsed();
+protected:
+	int actionUsed;
 };
 
 #endif /* STATE_H_ */
