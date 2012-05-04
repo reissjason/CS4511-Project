@@ -52,6 +52,22 @@ bool team::get_poison_spikes(){
 }
 
 pkmn * team::get_lead(){
+	if (lead->isAlive())
+		return lead;
+
+	if (one != NULL && one->isAlive())
+		lead = one;
+	else if (two != NULL && two->isAlive())
+		lead = two;
+	else if (three != NULL && three->isAlive())
+		lead = three;
+	else if (four != NULL && four->isAlive())
+		lead = four;
+	else if (five != NULL && five->isAlive())
+		lead = five;
+	else if (six != NULL && six->isAlive())
+		lead = six;
+
   return lead;
 }
 
@@ -77,4 +93,22 @@ pkmn * team::get_bench(int bench_num){
   return ret;
 }
 
+bool team::isAlive() {
+	bool alive = false;
+
+	if (one != NULL && one->isAlive())
+		alive = true;
+	if (two != NULL && two->isAlive())
+		alive = true;
+	if (three != NULL && three->isAlive())
+		alive = true;
+	if (four != NULL && four->isAlive())
+		alive = true;
+	if (five != NULL && five->isAlive())
+		alive = true;
+	if (six != NULL && six->isAlive())
+		alive = true;
+
+	return alive;
+}
 

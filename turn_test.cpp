@@ -76,7 +76,7 @@ int main(int args, char** argv) {
 	TinyAttack *ta4 = new TinyAttack(*ta);
 	TinyAttack *ta5 = new TinyAttack(*ta);
 	TinyAttack *ta6 = new TinyAttack(*ta);
-        TinyAttack *ta7 = new TinyAttack(*ta);
+    TinyAttack *ta7 = new TinyAttack(*ta);
 	TinyAttack *ta8 = new TinyAttack(*ta);
 	Pokeman *p = new Pokeman(40,40,ta2,ta,ta5,ta6);
 	Pokeman *p2 = new Pokeman(20,20,ta3,ta4,ta7,ta8);
@@ -89,7 +89,7 @@ int main(int args, char** argv) {
 	//t->next(1,2)->print();
 	Tree<Node<Turn>, Turn> tree(t);
 	generateSuccessors(&tree, 0);
-	tree.printClass();
+	//	tree.printClass();
 	int minimaxValue = turn_minimax(&tree);
 	cout << "Minimax Returns: " << minimaxValue << endl;
 	State* minimaxRecommends = buildAnswer(&tree, minimaxValue);

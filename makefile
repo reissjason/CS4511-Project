@@ -38,7 +38,7 @@ tinyAttack.o: tinyAttack.cpp TinyAttack.h
 
 tiny_attack_test: tiny_attack_test.cpp tinyAttack.o debug_print.o
 	$(compiler) $(flags) -o"tiny_attack_test" tiny_attack_test.cpp tinyAttack.o debug_print.o
-	
+
 tiny_test: pokeman tinyattack state
 	$(compiler) $(flags) -o"tiny_test" tiny_test.cpp pokeman.o tinyAttack.o State.o
 
@@ -65,6 +65,12 @@ turn_test: turn_test.cpp turn turn_minimax.cpp
 
 ui: turn ui.cpp debug_print.o
 	$(compiler) $(flags) -o"go" ui.cpp debug_print.o turn_minimax.cpp State.o pokeman.o tinyAttack.o Turn.o
+
+battle.o: battle.cpp battle.h
+	$(compiler) $(flags) -c battle.cpp
+
+minimax_game: minimax_game.cpp pkmn attack.o battle.o type.o
+	g++ minimax_game.cpp type.cpp pkmn.cpp battle.cpp attack.cpp team.cpp -o minimax_game -Wall	
 
 # Other Targets
 clean:

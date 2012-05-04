@@ -20,6 +20,8 @@ public:
   bool get_spikes();
   bool get_poison_spikes();
 
+  bool isAlive();
+
   pkmn * get_lead();
 
   pkmn * get_bench(int bench_num);

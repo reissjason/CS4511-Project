@@ -21,6 +21,9 @@ public:
   string get_item();
   string get_status();
   bool get_charge();
+  bool reduce_hp(int damage) { current_hp -= damage; return isAlive(); }
+
+  bool isAlive() { return current_hp > 0; }
 
   string get_attack(int attack_num);
   
