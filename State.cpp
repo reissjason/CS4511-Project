@@ -66,8 +66,10 @@ State::State(int *i) {
 }
 
 State::~State() {
-	delete this->myPokemon;
-	delete this->thatBastardsPokemon;
+//	delete this->myPokemon;
+//	this->myPokemon = NULL;
+//	delete this->thatBastardsPokemon;
+//	this->thatBastardsPokemon = NULL;
 }
 
 State::State(Pokeman* winner){
@@ -181,7 +183,7 @@ State* State::nextState(int selectedAction){
 
 //cout << "whoseturn? " << this->whoseTurn << endl;
 
-  cout << "Pokemans! use attack number " << selectedAction << "!!!" << endl;
+//  cout << "Pokemans! use attack number " << selectedAction << "!!!" << endl;
   if(this->whoseTurn == MY_TURN && selectedAction != SWITCH1 && selectedAction != SWITCH2 && selectedAction != SWITCH3){
 //cout << "check" <<endl;
 		active = newBattle->get_player()->get_lead();

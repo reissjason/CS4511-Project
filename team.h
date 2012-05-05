@@ -12,6 +12,7 @@ class team {
 public:
   team(Pokeman * t_one, Pokeman * t_two, Pokeman * t_three, Pokeman * t_four, Pokeman * t_five, Pokeman * t_six);
   team(const team& ta);
+  ~team() { cout << "delete team" << endl; delete one; delete two; delete three; delete four; delete five; delete six; }
   
   bool change_lead(Pokeman * new_lead);
 

@@ -68,16 +68,15 @@ void Node<T>::setMinimaxValue(int *i) {
 
 template <class T>
 Node<T>::~Node() {
-	Node* temp = this->children;
-	while (temp != NULL) {
-		Node* del = temp;
-		temp = temp->next;
-		delete del;
-	}
-	delete this->value;
-	this->value = NULL;
-	this->children = NULL;
-	this->next = NULL;
+//	Node* temp = this->children;
+//	while (temp != NULL) {
+//		Node* del = temp;
+//		temp = temp->next;
+//		delete del;
+//		del = NULL;
+//	}
+//	this->children = NULL;
+//	this->next = NULL;
 }
 
 template <class T>

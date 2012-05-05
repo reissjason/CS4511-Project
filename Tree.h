@@ -28,7 +28,7 @@ Tree<T,S>::Tree(S* val)  : T(val) {
 
 template <class T, class S>
 Tree<T,S>::~Tree() {
-	// TODO Auto-generated destructor stub
+	cout << "delete the tree" << endl;
 }
 
 template <class T, class S>

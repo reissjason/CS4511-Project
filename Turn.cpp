@@ -24,8 +24,8 @@ Turn::Turn(int *i) {
 }
 
 Turn::~Turn(){
-	delete this->state1;
-	delete this->state2;
+//	delete this->state1;
+//	delete this->state2;
 }
 
 State *Turn::getState1(){
@@ -131,8 +131,8 @@ Turn* Turn::next(int myAction, int hisAction) {
 		newState2 = newState1->nextState(myAction);
 	}
 	
-cout << "value = " << newState1->value << endl;
-cout << "value = " << newState2->value << endl;
+//cout << "value = " << newState1->value << endl;
+//cout << "value = " << newState2->value << endl;
 
 	Turn *nextTurn = new Turn(newState1, newState2);
 	return nextTurn;

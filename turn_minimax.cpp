@@ -32,8 +32,8 @@ int max_value(Node<Turn> *tree, int alpha, int beta) {
     beta = min(beta, v);
     temp = temp->getNext();
   }
-	cout << "Setting minimax value " << endl;
-  cout << v << endl;
+//	cout << "Setting minimax value " << endl;
+//  cout << v << endl;
 	int *i = new int(v);
 	tree->setMinimaxValue(i);
 	delete i;
@@ -57,8 +57,8 @@ int min_value(Node<Turn> *tree, int alpha, int beta) {
     beta = max(beta, v);
     temp = temp->getNext();
   }
-	cout << "Setting minimax value " << endl;
-	cout << v << endl;
+//	cout << "Setting minimax value " << endl;
+//	cout << v << endl;
 	int *i = new int(v);
 	tree->setMinimaxValue(i);
 	delete i;

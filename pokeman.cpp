@@ -107,13 +107,14 @@ bool Pokeman::isAlive() {
 
 Pokeman::~Pokeman() {
   for(int i = 0; i < NUM_OF_ATTACKS; i++){
-    delete this->attack[i]; //This causes problems since the Pokema might not "own" those attacks. They're pointers, not references.
-    this->attack[i] = NULL;
+	// delete this->attack[i]; //This causes problems since the Pokema might not "own" those attacks. They're pointers, not references.
+	//  this->attack[i] = NULL;
   }
 }
 
 void Pokeman::reduce_hp(int damage) {
 	current_hp -= damage;
+	if (current_hp <= 0) status = "fainted";
 }
 
 int Pokeman::getHealth(){

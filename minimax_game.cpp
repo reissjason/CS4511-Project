@@ -3,16 +3,96 @@
 #include "Tree.h"
 #include "team.h"
 #include "battle.h"
+#include "TinyAttack.h"
 #include <string>
 #include <sstream>
 #include <stdio.h>
+#include "list.h"
+
+#include "Turn.h"
+#include "Node.h"
+#include "Tree.h"
+#include "turn_minimax.h"
+#include "team.h"
+#include "battle.h"
+#include "type.h"
+#include "list.h"
+
+#define USE_ATTACK_1 1
+#define USE_ATTACK_2 2
+#define USE_ATTACK_3 3
+#define USE_ATTACK_4 4
+#define SWITCH1 5
+#define SWITCH2 6
+#define SWITCH3 7
+#define NUM_OF_ACTIONS 4
+#define INVALID -2
+#define MAX_DEPTH 2
+
 
 using namespace std;
+int count = 0;
+list * alist = new list();
 
-pkmn* choose(string);
+void generateSuccessors(Node<Turn>* parent, int depth) {
+	if (depth > MAX_DEPTH) { return; }
+	if (parent == NULL) {
+		cout << "NULL value passed to Successor Generation" << endl;
+	}
 
-int ATTACK_LIST_LENGTH = 30;
-attack * attack_list[30];
+
+	int mySelectedAction = 1;
+	int hisSelectedAction = 1;
+
+	for (mySelectedAction = USE_ATTACK_1; mySelectedAction <= NUM_OF_ACTIONS; mySelectedAction++) {
+		for(hisSelectedAction = USE_ATTACK_1; hisSelectedAction <= NUM_OF_ACTIONS; hisSelectedAction++) {
+			count++;
+			//cout << count << ": " << "Using " << mySelectedAction << ", " << hisSelectedAction << " at depth " << depth << endl;
+			Turn *nextTurn = parent->getValue()->next(mySelectedAction, hisSelectedAction);
+			if (nextTurn != NULL) {
+				Node<Turn>* child = new Node<Turn>(nextTurn);
+				if( child->getValue()->isValid() ) {
+					parent->addChild(child);
+					if(!child->getValue()->isOver()) {
+						generateSuccessors(child, depth + 1);
+					}
+				}
+				else {
+					delete child; //Invalid children are deleted, as is the Spartan tradition.
+					child = NULL;
+				}
+			}
+		}
+	}
+}
+
+
+State *buildAnswer(Node<Turn>* parent, int minimaxValue) {
+	Node<Turn>* temp = parent->getChildren();
+	State *ans;
+	while(temp != NULL) {
+		//cout << "active pokemon = " << temp->getValue()->getState1()->getActivePokemon()->get_name() << endl;
+		//cout << "myPokemon = " << temp->getValue()->getState1()->myPokemon->get_name() << endl;
+		//cout << "getMinimaxValue = " << temp->getMinimaxValue() << endl;
+		//cout << "minimax value = " << minimaxValue << endl << endl;
+		if(temp->getMinimaxValue() == minimaxValue) {
+
+			if (temp->getValue()->getState1()->getActivePokemon()->equals(*temp->getValue()->getState1()->myPokemon)){
+				ans = new State(*temp->getValue()->getState1());
+				//cout << "ans->myPokemon->get_name() = " << ans->myPokemon->get_name() << endl;
+			}
+			else ans = new State(*temp->getValue()->getState2());
+			return ans;
+		}
+		temp = temp->getNext();
+	}
+	cout << "here" << endl;
+	return NULL;
+}
+
+Pokeman* choose(string);
+
+TinyAttack * attack_list[30];
 
 int * stat_cast(int hp, int atk, int def, int spatk, int spdef, int spd){
 	int * ret_val = new int[6];
@@ -25,20 +105,20 @@ int * stat_cast(int hp, int atk, int def, int spatk, int spdef, int spd){
 	return ret_val;
 }
 
-attack * string_to_attack(string move_name){
+TinyAttack * string_to_attack(string move_name){
 	int i;
 
 	cout << "looking for " << move_name << endl;
 	for(i = 0; i < ATTACK_LIST_LENGTH; i++){
-//		if(attack_list[i] != NULL)
-//			cout << "is it " << attack_list[i]->get_name() << "?" << endl;
+		//		if(attack_list[i] != NULL)
+		//			cout << "is it " << attack_list[i]->get_name() << "?" << endl;
 
 		if(attack_list[i] != NULL && attack_list[i]->get_name().compare(move_name) == 0){
-//			cout << "yep" << endl;
+			//			cout << "yep" << endl;
 			return attack_list[i];
 		}
-//		if(attack_list[i] != NULL)
-//			cout << "nope" << endl;
+		//		if(attack_list[i] != NULL)
+		//			cout << "nope" << endl;
 	}
 	return NULL;
 }
@@ -50,12 +130,12 @@ int have_a_fight() {
 	cout << "Choose your Enemy!" << endl;
 
 	string pokemons[] = { "charizard",
-							"roserade",
-							"slowbro",
-							"ambipom",
-							"yanmega",
-							"porygon2"
-						};
+			"roserade",
+			"slowbro",
+			"ambipom",
+			"yanmega",
+			"porygon2"
+	};
 
 	string choices = "";
 
@@ -77,13 +157,25 @@ int have_a_fight() {
 
 	cout << "Teams have been chosen!" << endl;
 
-	battle * sim = new battle(laptop, tower);
+	cout << "Team 1 : " << laptop->isAlive() << endl;
+	cout << pokemons[(choices[0])-48] << endl;
+	cout << pokemons[(choices[1])-48] << endl;
+	cout << pokemons[(choices[2])-48] << endl;
+	cout << endl;
 
+	cout << "Team 2 : " << tower->isAlive() << endl;
+	cout << pokemons[(choices[3])-48] << endl;
+	cout << pokemons[(choices[4])-48] << endl;
+	cout << pokemons[(choices[5])-48] << endl;
+	cout << endl;
+
+	battle * sim = new battle(laptop, tower);
+	battle * sim2 = new battle(*sim);
 	cout << "Teams have been made!" << endl;
 
-	attack * next_move;
-	pkmn * attacker;
-	pkmn * defender;
+	TinyAttack *next_move;
+	Pokeman * attacker;
+	Pokeman * defender;
 	cout << "Fight!" << endl;
 
 	int round_num = 1;
@@ -92,26 +184,56 @@ int have_a_fight() {
 
 
 	while (laptop->isAlive() && tower->isAlive()) {
-		cout << "A player has been gotten!" << endl;
+		State *s = new State(sim, 0);
+		State *s2 = new State(sim2, 1);
+		Turn *t = new Turn(s, s2);
+
+		cout << "*********************************************************************************************************************" << endl;
+
+		Tree<Node<Turn>, Turn> tree(t);
 
 		attacker = sim->get_player()->get_lead();
 		defender = sim->get_opponent()->get_lead();
+		cout << "A player has been gotten!" << endl;
+
+		generateSuccessors(&tree, 0);
+//		tree.printClass();
+		int minimaxValue = turn_minimax(&tree);
+		cout << "Minimax Returns: " << minimaxValue << endl;
+		State* minimaxRecommends = buildAnswer(&tree, minimaxValue);
+		//cout << "test = " << minimaxRecommends->myPokemon->get_name() << endl;
+		if (minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
+			cout << "switching to " << minimaxRecommends->myPokemon->get_name() << endl;
+			sim->get_player()->change_lead(minimaxRecommends->myPokemon);
+			attacker = sim->get_player()->get_lead();
+		} else {
+			cout << "MINIMAX RECOMMENDS: " << minimaxRecommends->getActionUsed() << endl;
+			attack_num = minimaxRecommends->getActionUsed();
+
+			cout << "That player has an attack!" << endl;
+			cout << "look for attack #" << attack_num << endl;
+			cout << attacker->get_attack(attack_num) << endl;
+			next_move = alist->string_to_attack(attacker->get_attack(attack_num));
+
+			cout << "That attack has power = " << next_move->get_power() << "!" << endl;
+			cout << attacker->get_name() << " attacks " << defender->get_name() << " with " << next_move->get_name() << endl;
+
+			damage = sim->calculate_damage(next_move, attacker, defender);
+			cout << "damage = " << damage << endl;
+
+			defender->reduce_hp(damage);
+
+
+		}
+
+		delete minimaxRecommends;
+
+
 
 		attack_num = rand() % 4 + 1;
-		next_move = string_to_attack(attacker->get_attack(attack_num));
-		cout << "That player has an attack!" << endl;
-		cout << "That attack has power = " << next_move->get_power() << "!" << endl;
-		cout << attacker->get_name() << " attacks " << defender->get_name() << " with " << next_move->get_name() << endl;
 
-		damage = sim->calculate_damage(next_move, attacker, defender);
-		cout << "damage = " << damage << endl;
-
-		defender->reduce_hp(damage);
-
-		attack_num = rand() % 4 + 1;
-
-		next_move = string_to_attack(defender->get_attack(attack_num));
-
+		next_move = alist->string_to_attack(defender->get_attack(attack_num));
+		cout << defender->get_name() << " attacks " << attacker->get_name() << " with " << next_move->get_name() << endl;
 		damage = sim->calculate_damage(next_move, defender, attacker);
 		cout << "damage = " << damage << endl;
 
@@ -121,28 +243,43 @@ int have_a_fight() {
 		cout << "Round " << round_num << endl;
 		cout << " " << attacker->get_name() << " hp: " << attacker->get_current_hp() << endl;
 		cout << " " << defender->get_name() << " hp: " << defender->get_current_hp() << endl;
+		delete s; delete s2; delete t;
 
+		if (round_num > 100)  // too long just call it a tie
+			break;
 	}
 
+	delete sim;
+	delete sim2;
+
+	int ret_val =0;
 	if (!tower->isAlive() && !laptop->isAlive()) {
 		cout << endl << "There was a tie!" << endl << endl;
-		return 0;
+		ret_val = 0;
 	} else if (tower->isAlive()) {
 		cout << endl << "Team 2 wins!" << endl << endl;
-		return 2;
+		ret_val = 2;
 	} else {
 		cout << endl << "Team 1 wins!" << endl << endl;
-		return 1;
+		ret_val = 1;
 	}
+
+	delete tower;
+	delete laptop;
+	return ret_val;
 }
 
 int main() {
+
+	alist->construct_list();
+
 	srand(time(NULL));
-	int num_of_battles = 2000;
+	int num_of_battles = 1;
 
 	int results[3] = {0,0,0};
 
 	for(int i=0; i<num_of_battles; i++) {
+		cout << "Battle " << i+1 << endl;
 		int result = have_a_fight();
 		results[result]++;
 	}
@@ -156,140 +293,78 @@ int main() {
 	return 0;
 }
 
-pkmn* choose(string name) {
-	for(int i = 0; i<ATTACK_LIST_LENGTH; i++){
-		attack_list[i] = NULL;
-	}
-
-	//charizard's attack
-	  attack * flare_blitz = new attack("flare blitz", "fire", "recoil", "physical", 120, 1, .3);
-	  attack * thunderpunch = new attack("thunderpunch", "electric", "paralyze", "physical", 75, 1, .1);
-	  attack * dragon_dance = new attack("dragon dance", "dragon", "stat attack speed", "none", -1, 1, 1);
-	  attack * earthquake = new attack("earthquake", "ground", "none", "physical", 100, 1, 0);
-	  attack_list[0] = flare_blitz;
-	  attack_list[1] = thunderpunch;
-	  attack_list[2] = dragon_dance;
-	  attack_list[3] = earthquake;
-
-	//roserade's attacks
-	  attack * giga_drain = new attack("giga drain", "grass", "drain", "special", 75, 1, .5);
-	  attack * sludge_bomb = new attack("sludge bomb", "poison", "poison", "special", 90, 1, .3);
-	  attack * sleep_powder = new attack("sleep powder", "grass", "sleep", "none", -1, 1, .75);
-	  attack * synthesis = new attack("synthesis", "grass", "heal", "none", -1, 1, .5);
-	  attack_list[4] = giga_drain;
-	  attack_list[5] = sludge_bomb;
-	  attack_list[6] = sleep_powder;
-	  attack_list[7] = synthesis;
-
-	//slowbro's attacks
-	  attack * scald = new attack("scald", "water", "burn", "special", 80, 1, .3);
-	  attack * slack_off = new attack("slack off", "normal", "heal", "none", -1, 1, .5);
-	  attack * psychic = new attack("psychic", "psychic", "none", "special", 90, 1, 0);
-	  attack * toxic = new attack("toxic", "poison", "poison", "none", -1, 1, .9);
-	  attack_list[8] = scald;
-	  attack_list[9] = slack_off;
-	  attack_list[10] = psychic;
-	  attack_list[11] = toxic;
-
-	//ambipom's attacks
-	  attack * aerial_ace = new attack("aerial ace", "flying", "none", "physical", 60, 1, 0);
-	  attack * double_hit = new attack("double hit", "normal", "double", "physical", 35, 1, 0);
-	  attack * fake_out = new attack("fake out", "normal", "flinch", "physical", 40, 1, 1);
-	  attack * low_sweep = new attack("low sweep", "fighting", "foe stat speed", "physical", 60, 1, -1);
-	  attack_list[12] = aerial_ace;
-	  attack_list[13] = double_hit;
-	  attack_list[14] = fake_out;
-	  attack_list[15] = low_sweep;
-
-	//porygon2's attacks
-	  attack * ice_beam = new attack("ice beam", "ice", "freeze", "special", 95, 1, .1);
-	  attack * thunderbolt = new attack("thunderbolt", "electric", "paralzye", "special", 95, 1, .1);
-	  //toxic
-	  attack * recover = new attack("recover", "normal", "heal", "none", -1, 1, .5);
-	  attack_list[16] = ice_beam;
-	  attack_list[17] = thunderbolt;
-	  attack_list[18] = recover;
-
-	//yanmega's attacks
-	  //giga drain
-	  attack * air_slash = new attack("air slash", "flying", "flinch", "special", 75, .95, .3);
-	  attack * bug_buzz = new attack("bug buzz", "bug", "none", "special", 90, 1, 0);
-	  attack * protect = new attack("protect", "normal", "protect", "none", -1, 1, 0);
-	  attack_list[19] = air_slash;
-	  attack_list[20] = bug_buzz;
-	  attack_list[21] = protect;
-
+Pokeman* choose(string name) {
 	int * stat_ptr;
-
+	//team1
+	Pokeman* choice = NULL;
 	if (name == "charizard") {
-		stat_ptr = stat_cast(297, 293, 193, 228, 206, 299);
-		pkmn * charizard = new pkmn("charizard", stat_ptr, "fire", "flying", "blaze");
-		charizard->add_item("life orb");
+		TinyAttack * charizard_1 = new TinyAttack(*alist->string_to_attack("flare blitz"));
+		TinyAttack * charizard_2 = new TinyAttack(*alist->string_to_attack("thunderpunch"));
+		TinyAttack * charizard_3 = new TinyAttack(*alist->string_to_attack("dragon dance"));
+		TinyAttack * charizard_4 = new TinyAttack(*alist->string_to_attack("earthquake"));
 
-		charizard->set_attacks("flare blitz", "thunderpunch", "dragon dance", "earthquake");
-
-		return charizard;
+		stat_ptr = alist->stat_cast(297, 293, 193, 228, 206, 299);
+		choice = new Pokeman("charizard", stat_ptr, "fire", "flying", "blaze", charizard_1, charizard_2, charizard_3, charizard_4);
 	}
 
 	if (name == "roserade") {
-		stat_ptr = stat_cast(261, 158, 146, 383, 247, 279);
-		pkmn * roserade = new pkmn("roserade", stat_ptr, "grass", "poison", "natural cure");
-		roserade->add_item("big root");
+		TinyAttack * roserade_1 = new TinyAttack(*alist->string_to_attack("giga drain"));
+		TinyAttack * roserade_2 = new TinyAttack(*alist->string_to_attack("sludge bomb"));
+		TinyAttack * roserade_3 = new TinyAttack(*alist->string_to_attack("sleep powder"));
+		TinyAttack * roserade_4 = new TinyAttack(*alist->string_to_attack("synthesis"));
 
-
-		roserade->set_attacks("giga drain", "sludge bomb", "sleep powder", "synthesis");
-		return roserade;
+		stat_ptr = alist->stat_cast(261, 158, 146, 383, 247, 279);
+		choice = new Pokeman("roserade", stat_ptr, "grass", "poison", "natural cure", roserade_1, roserade_2, roserade_3, roserade_4);
+		//  roserade->add_item("big root");
 	}
 
 	if (name == "slowbro") {
+		TinyAttack * slowbro_1 = new TinyAttack(*alist->string_to_attack("scald"));
+		TinyAttack * slowbro_2 = new TinyAttack(*alist->string_to_attack("slack off"));
+		TinyAttack * slowbro_3 = new TinyAttack(*alist->string_to_attack("psychic"));
+		TinyAttack * slowbro_4 = new TinyAttack(*alist->string_to_attack("toxic"));
 
-		stat_ptr = stat_cast(393, 167, 348, 240, 196, 96);
-		pkmn * slowbro = new pkmn("slowbro", stat_ptr, "water", "psychic", "regenerator");
-		slowbro->add_item("leftover");
+		stat_ptr = alist->stat_cast(393, 167, 348, 240, 196, 96);
+		choice = new Pokeman("slowbro", stat_ptr, "water", "psychic", "regenerator", slowbro_1, slowbro_2, slowbro_3, slowbro_4);
+		//  slowbro->add_item("leftover");
 
-
-
-		slowbro->set_attacks("scald", "slack off", "psychic", "toxic");
-
-		return slowbro;
 	}
 
 	if (name == "ambipom") {
-
-		stat_ptr = stat_cast(292, 328, 168, 140, 168, 329);
-		pkmn * ambipom = new pkmn("ambipom", stat_ptr, "normal", "none", "technician");
-		ambipom->add_item("gem flying");
-
-
-		ambipom->set_attacks("aerial ace", "double hit", "fake out", "low sweep");
-
-		return ambipom;
-	}
-
-	if (name == "porygon2") {
-
-		stat_ptr = stat_cast(374, 176, 288, 246, 244, 156);
-		pkmn * porygon2 = new pkmn("porygon2", stat_ptr, "normal", "none", "analytic");
-		porygon2->add_item("eviolite");
-
-
-		porygon2->set_attacks("ice beam", "thunderbolt", "recover", "toxic");
-
-		return porygon2;
+		TinyAttack * ambipom_1 = new TinyAttack(*alist->string_to_attack("aerial ace"));
+		TinyAttack * ambipom_2 = new TinyAttack(*alist->string_to_attack("double hit"));
+		TinyAttack * ambipom_3 = new TinyAttack(*alist->string_to_attack("fake out"));
+		TinyAttack * ambipom_4 = new TinyAttack(*alist->string_to_attack("low sweep"));
+		//team2
+		stat_ptr = alist->stat_cast(292, 328, 168, 140, 168, 329);
+		choice = new Pokeman("ambipom", stat_ptr, "normal", "none", "technician", ambipom_1, ambipom_2, ambipom_3, ambipom_4);
+		//  ambipom->add_item("gem flying");
 	}
 
 	if (name == "yanmega") {
-		stat_ptr = stat_cast(308, 149, 208, 325, 148, 317);
-		pkmn * yanmega = new pkmn("yanmega", stat_ptr, "bug", "flying", "speed boost");
-		yanmega->add_item("wise glasses");
+		TinyAttack * yanmega_1 = new TinyAttack(*alist->string_to_attack("giga drain"));
+		TinyAttack * yanmega_2 = new TinyAttack(*alist->string_to_attack("bug buzz"));
+		TinyAttack * yanmega_3 = new TinyAttack(*alist->string_to_attack("air slash"));
+		TinyAttack * yanmega_4 = new TinyAttack(*alist->string_to_attack("protect"));
 
-
-		yanmega->set_attacks("giga drain", "bug buzz", "air slash", "protect");
-
-		return yanmega;
+		stat_ptr = alist->stat_cast(308, 149, 208, 325, 148, 317);
+		choice = new Pokeman("yanmega", stat_ptr, "bug", "flying", "speed boost", yanmega_1, yanmega_2, yanmega_3, yanmega_4);
+		//  yanmega->add_item("wise glasses");
 	}
 
-	return NULL;
+	if (name == "porygon2") {
+		TinyAttack * porygon2_1 = new TinyAttack(*alist->string_to_attack("ice beam"));
+		TinyAttack * porygon2_2 = new TinyAttack(*alist->string_to_attack("thunderbolt"));
+		TinyAttack * porygon2_3 = new TinyAttack(*alist->string_to_attack("recover"));
+		TinyAttack * porygon2_4 = new TinyAttack(*alist->string_to_attack("toxic"));
+
+		stat_ptr = alist->stat_cast(374, 176, 288, 246, 244, 156);
+		choice = new Pokeman("porygon2", stat_ptr, "normal", "none", "analytic", porygon2_1, porygon2_2, porygon2_3, porygon2_4);
+	}
+
+	if (choice != NULL)
+		cout << "Picked " << choice->get_name() << " : " << choice->get_current_hp() << " : isAlive() = " << choice->isAlive() << endl;
+	return choice;
 }
 
 
