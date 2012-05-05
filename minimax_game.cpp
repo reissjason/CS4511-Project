@@ -3,6 +3,8 @@
 #include "Tree.h"
 #include "team.h"
 #include "battle.h"
+#include <string>
+#include <sstream>
 #include <stdio.h>
 
 using namespace std;
@@ -28,34 +30,50 @@ attack * string_to_attack(string move_name){
 
 	cout << "looking for " << move_name << endl;
 	for(i = 0; i < ATTACK_LIST_LENGTH; i++){
-		if(attack_list[i] != NULL)
-			cout << "is it " << attack_list[i]->get_name() << "?" << endl;
+//		if(attack_list[i] != NULL)
+//			cout << "is it " << attack_list[i]->get_name() << "?" << endl;
 
 		if(attack_list[i] != NULL && attack_list[i]->get_name().compare(move_name) == 0){
-			cout << "yep" << endl;
+//			cout << "yep" << endl;
 			return attack_list[i];
 		}
-		if(attack_list[i] != NULL)
-			cout << "nope" << endl;
-		//cout<< "i = " << i << endl << "attack = " << attack_list[i]->get_name() << endl << "move = " << move_name <<endl;
+//		if(attack_list[i] != NULL)
+//			cout << "nope" << endl;
 	}
 	return NULL;
 }
 
-int main() {
-
-
+int have_a_fight() {
 
 	cout << "Choose your Pokemon!" <<endl;
 
 	cout << "Choose your Enemy!" << endl;
 
-	team * laptop = new team(choose("charizard"),
-			choose("roserade"),
-			choose("slowbro"), NULL, NULL, NULL);
-	team * tower = new team(choose("ambipom"),
-			choose("yanmega"),
-			choose("porygon2"), NULL, NULL, NULL);
+	string pokemons[] = { "charizard",
+							"roserade",
+							"slowbro",
+							"ambipom",
+							"yanmega",
+							"porygon2"
+						};
+
+	string choices = "";
+
+	while (choices.length() < 6) {
+		int num = rand() % 6;
+		stringstream ss;
+		ss << num;
+		if (choices.find_first_of(ss.str()) == string::npos)
+			choices += ss.str();
+	}
+
+	team * laptop = new team(choose(pokemons[(choices[0])-48]),
+			choose(pokemons[(choices[1])-48]),
+			choose(pokemons[(choices[2])-48]), NULL, NULL, NULL);
+
+	team * tower = new team(choose(pokemons[(choices[3])-48]),
+			choose(pokemons[(choices[4])-48]),
+			choose(pokemons[(choices[5])-48]), NULL, NULL, NULL);
 
 	cout << "Teams have been chosen!" << endl;
 
@@ -72,7 +90,7 @@ int main() {
 	int damage = 0;
 	int attack_num = 1;
 
-	srand(time(NULL));
+
 	while (laptop->isAlive() && tower->isAlive()) {
 		cout << "A player has been gotten!" << endl;
 
@@ -106,20 +124,37 @@ int main() {
 
 	}
 
-	if (!tower->isAlive() && !laptop->isAlive())
+	if (!tower->isAlive() && !laptop->isAlive()) {
 		cout << endl << "There was a tie!" << endl << endl;
-	else if (tower->isAlive())
+		return 0;
+	} else if (tower->isAlive()) {
 		cout << endl << "Team 2 wins!" << endl << endl;
-	else
+		return 2;
+	} else {
 		cout << endl << "Team 1 wins!" << endl << endl;
+		return 1;
+	}
+}
+
+int main() {
+	srand(time(NULL));
+	int num_of_battles = 2000;
+
+	int results[3] = {0,0,0};
+
+	for(int i=0; i<num_of_battles; i++) {
+		int result = have_a_fight();
+		results[result]++;
+	}
+
+	cout << "Out of " << num_of_battles << " battles there were:" << endl;
+	cout << "\t" << results[0] << "\tties" << endl;
+	cout << "\t" << results[1] << "\tteam 1 wins" << endl;
+	cout << "\t" << results[2] << "\tteam 2 wins" << endl;
+
 
 	return 0;
 }
-
-
-
-
-
 
 pkmn* choose(string name) {
 	for(int i = 0; i<ATTACK_LIST_LENGTH; i++){
