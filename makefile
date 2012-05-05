@@ -72,9 +72,12 @@ battle.o: battle.cpp battle.h
 minimax_game: minimax_game.cpp pkmn attack.o battle.o type.o
 	g++ minimax_game.cpp type.cpp pkmn.cpp battle.cpp attack.cpp team.cpp -o minimax_game -Wall	
 
+random_game: minimax_game.cpp pkmn attack.o battle.o type.o
+	g++ random_game.cpp type.cpp pokeman.cpp battle.cpp Turn.cpp State.cpp tinyAttack.cpp team.cpp list.cpp debug_print.cpp -o random_game -w	
+
 # Other Targets
 clean:
-	-rm -fr *.o *_test *.out.txt
+	-rm -fr *.o *_test *.out.txt minimax_game random_game
 
 .PHONY: all clean dependents
 

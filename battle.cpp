@@ -1,25 +1,35 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "pkmn.h"
+#include "Pokeman.h"
 #include "team.h"
-#include "attack.h"
+#include "TinyAttack.h"
 
 using namespace std;
 
 #include "battle.h"
 
 battle::battle(team * b_player, team * b_opponent){
-  player = b_player;
-  opponent = b_opponent;
+  this->player = b_player;
+  this->opponent = b_opponent;
+}
+
+battle::battle(const battle& ba){
+  this->player = new team(*ba.player);
+  this->opponent = new team(*ba.opponent);
+  this->weather.assign(ba.weather);
 }
 
 team* battle::get_player(){
-  return player;
+  return this->player;
 }
 
 team* battle::get_opponent(){
-  return opponent;
+  return this->opponent;
+}
+
+string battle::get_weather(){
+  return this->weather;
 }
 
 /*
@@ -69,7 +79,7 @@ float battle::user_item_base_dmg(string item, string p_or_s, string type){
 * takes in the user's ability, the move type and power, and the users current and total hp
 * outputs the userAbility modifier to base damage
 */
-float battle::user_ability_base_dmg(string ability, attack * move, int current_hp, int max_hp){
+float battle::user_ability_base_dmg(string ability, TinyAttack * move, int current_hp, int max_hp){
 
   string type = move->get_type();
   int power = move->get_power();
@@ -177,7 +187,7 @@ float battle::stat_modifier_func(int statChange, string userAbility, string foeA
 *
 *
 */
-int battle::calculate_damage(attack * move, pkmn * user, pkmn * defender){
+int battle::calculate_damage(TinyAttack * move, Pokeman * user, Pokeman * defender){
 // assumes move is valid, user and defender are valid and initiated correctly ::TODO:: checks to confirm this
 //cout << "in calculate_damage" << endl;
   type * types = new type();

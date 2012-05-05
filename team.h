@@ -6,34 +6,37 @@ using namespace std;
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "pkmn.h"
+#include "Pokeman.h"
 
 class team {
 public:
-  team(pkmn * t_one, pkmn * t_two, pkmn * t_three, pkmn * t_four, pkmn * t_five, pkmn * t_six);
+  team(Pokeman * t_one, Pokeman * t_two, Pokeman * t_three, Pokeman * t_four, Pokeman * t_five, Pokeman * t_six);
+  team(const team& ta);
   
-  void change_lead(pkmn * new_lead);
+  bool change_lead(Pokeman * new_lead);
+
+  int get_fainted();
+  int get_total();
 
   bool get_lightscreen();
   bool get_reflect();
   bool get_stealth_rocks();
   bool get_spikes();
   bool get_poison_spikes();
+  bool isAlive() ;
 
-  bool isAlive();
+  Pokeman * get_lead();
 
-  pkmn * get_lead();
-
-  pkmn * get_bench(int bench_num);
+  Pokeman * get_bench(int bench_num);
   
 private:
-  pkmn * lead;
-  pkmn * one;
-  pkmn * two;
-  pkmn * three;
-  pkmn * four;
-  pkmn * five;
-  pkmn * six;
+  Pokeman * lead;
+  Pokeman * one;
+  Pokeman * two;
+  Pokeman * three;
+  Pokeman * four;
+  Pokeman * five;
+  Pokeman * six;
 
 //all specific instances that can be ignored for proof of concept
   bool lightscreen;

@@ -23,7 +23,7 @@ public:
 	bool isOver();
 	bool isValid();
 	int getValue();
-	State *getState1();
+  State *getState1();
 	State *getState2();
 protected:
 	State *state1;

@@ -1,34 +1,132 @@
 #include <iostream>
 #include <string>
 #include <math.h>
-#include "pkmn.h"
+#include "Pokeman.h"
 
 using namespace std;
 
 #include "team.h"
 
-team::team(pkmn * t_one, pkmn * t_two, pkmn * t_three, pkmn * t_four, pkmn * t_five, pkmn * t_six){
-  one = t_one;
-  two = t_two;
-  three = t_three;
-  four = t_four;
-  five = t_five;
-  six = t_six;
-  lead = one;
+team::team(Pokeman * t_one, Pokeman * t_two, Pokeman * t_three, Pokeman * t_four, Pokeman * t_five, Pokeman * t_six){
+  this->one = t_one;
+  this->two = t_two;
+  this->three = t_three;
+  this->four = t_four;
+  this->five = t_five;
+  this->six = t_six;
+  this->lead = one;
 
-  lightscreen = false;
-  reflect = false;
+  this->lightscreen = false;
+  this->reflect = false;
+  this->stealth_rocks = false;
+  this->spikes = false;
+  this->poison_spikes = false;
 }
-void team::change_lead(pkmn * new_lead){
+
+team::team(const team& ta){
+  string temp;
+  temp.assign(ta.lead->get_name());
+  this->one = new Pokeman(*ta.one);
+  this->two = new Pokeman(*ta.two);
+  this->three = new Pokeman(*ta.three);
+  this->four = new Pokeman(*ta.four);
+  this->five = new Pokeman(*ta.five);
+  this->six = new Pokeman(*ta.six);
+  if(one->get_name().compare(temp) == 0){
+    this->lead = this->one;
+  }else if(two->get_name().compare(temp) == 0){
+    this->lead = this->two;
+  }else if(three->get_name().compare(temp) == 0){
+    this->lead = this->three;
+  }else if(four->get_name().compare(temp) == 0){
+    this->lead = this->four;
+  }else if(five->get_name().compare(temp) == 0){
+    this->lead = this->five;
+  }else if(six->get_name().compare(temp) == 0){
+    this->lead = this->six;
+  }
+
+//all specific instances that can be ignored for proof of concept
+  this->lightscreen = ta.lightscreen;
+  this->reflect = ta.reflect;
+  this->stealth_rocks = ta.stealth_rocks;
+  this->spikes = ta.spikes;
+  this->poison_spikes = ta.poison_spikes;
+}
+
+bool team::change_lead(Pokeman * new_lead){
 //::TODO check if new lead is fainted
   if(lead->get_name().compare(new_lead->get_name()) == 0){
     cout << "Error in change_lead, given pokemon is already active" << endl;
+    return false;
   }
   if(new_lead == NULL){
-    cout << "Error in change_lead, attempting to make a null pkmn active" << endl;
+    cout << "Error in change_lead, attempting to make a null Pokeman active" << endl;
+    return false;
   }else {
     lead = new_lead;
+    return true;
   }
+}
+
+int team::get_fainted(){
+  int ret = 0;
+
+  if(one != NULL){
+    if(one->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  if(two != NULL){
+    if(two->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  if(three != NULL){
+    if(three->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  if(four != NULL){
+    if(four->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  if(five != NULL){
+    if(five->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  if(six != NULL){
+    if(six->get_status().compare("fainted") == 0){
+      ret++;
+    }
+  }
+  return ret;
+}
+
+int team::get_total(){
+  int ret = 0;
+
+  if(one != NULL){
+    ret++;
+  }
+  if(two != NULL){
+    ret++;
+  }
+  if(three != NULL){
+    ret++;
+  }
+  if(four != NULL){
+    ret++;
+  }
+  if(five != NULL){
+    ret++;
+  }
+  if(six != NULL){
+    ret++;
+  }
+  return ret;
 }
 
 bool team::get_lightscreen(){
@@ -51,7 +149,7 @@ bool team::get_poison_spikes(){
   return poison_spikes;
 }
 
-pkmn * team::get_lead(){
+Pokeman * team::get_lead(){
 	if (lead->isAlive())
 		return lead;
 
@@ -71,8 +169,8 @@ pkmn * team::get_lead(){
   return lead;
 }
 
-pkmn * team::get_bench(int bench_num){
-  pkmn * ret = NULL;  
+Pokeman * team::get_bench(int bench_num){
+  Pokeman * ret = NULL;  
   if(bench_num == 1){
     ret = one;
   }else if(bench_num == 2){
