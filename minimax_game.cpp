@@ -106,7 +106,9 @@ int main() {
 
 	}
 
-	if (tower->isAlive())
+	if (!tower->isAlive() && !laptop->isAlive())
+		cout << endl << "There was a tie!" << endl << endl;
+	else if (tower->isAlive())
 		cout << endl << "Team 2 wins!" << endl << endl;
 	else
 		cout << endl << "Team 1 wins!" << endl << endl;
