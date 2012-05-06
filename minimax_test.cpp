@@ -23,7 +23,7 @@ int main(int args, char** argv) {
 	int i = 5;
 
 	int* x = new int(10);
-	Tree<Node<int>,int> tree(x);
+	Tree<Node<int>,int> *tree = new Tree<Node<int>,int>(x);
 
 	srand ( time(NULL) );
 
@@ -31,7 +31,7 @@ int main(int args, char** argv) {
 		//cout << "step " << i << endl;
 		int* in = new int(rand()%100);
 		Node<int>* n = new Node<int>(in);
-		tree.addChild(n);
+		tree->addChild(n);
 
 		for (int j = 0; j < 2; j++) {
 			int* inn = new int(rand()%100);
@@ -47,7 +47,8 @@ int main(int args, char** argv) {
 		i--;
 	}
 
-	Node<int>* value = minimax<Node<int> > (&tree);
+	Node<int>* root = tree;
+	Node<int>* value = minimax<Node<int>, int > (root);
 
 	tree.print();
        

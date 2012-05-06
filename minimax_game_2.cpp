@@ -134,13 +134,13 @@ int have_a_fight() {
 			"porygon2"
 	};
 
-	string choices = "";
+	string choices = "456123";
 
 	while (choices.length() < 6) {
 		int num = rand() % 6;
 		stringstream ss;
 		ss << num;
-		//if (choices.find_first_of(ss.str()) == string::npos)
+		if (choices.find_first_of(ss.str()) == string::npos)
 			choices += ss.str();
 	}
 
@@ -167,7 +167,7 @@ int have_a_fight() {
 	cout << endl;
 
 	battle * sim = new battle(laptop, tower);
-	battle * sim2 = new battle(*sim);
+
 	cout << "Teams have been made!" << endl;
 
 	TinyAttack *next_move;
@@ -185,23 +185,14 @@ int have_a_fight() {
 	TinyAttack *last_move = NULL;
 
 	while (laptop->isAlive() && tower->isAlive()) {
-		State *s = new State(sim, 0);
-		State *s2 = new State(sim2, 1);
-		Turn *t = new Turn(s, s2);
+		cout << "****************************************************" << endl;
 
-		cout << "*********************************************************************************************************************" << endl;
-
-		Tree<Node<Turn>, Turn> tree(t);
 
 		attacker = sim->get_player()->get_lead();
 		defender = sim->get_opponent()->get_lead();
-		cout << "A player has been gotten!" << endl;
+		cout << attacker->get_name() << " vs " << defender->get_name() << endl;
 
-		generateSuccessors(&tree, 0);
-//		tree.printClass();
-		int minimaxValue = turn_minimax(&tree);
-		cout << "Minimax Returns: " << minimaxValue << endl;
-		State* minimaxRecommends = buildAnswer(&tree, minimaxValue);
+		State* minimaxRecommends = run_minimax(sim);
 
 		cout << "MINIMAX RECOMMENDS: " << minimaxRecommends->getActionUsed() << endl;
 		attack_num = minimaxRecommends->getActionUsed();
@@ -218,10 +209,12 @@ int have_a_fight() {
 //			dont_switch = false;
 //		}
 
-		if (!switched_last_round && !dont_switch && minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
-			cout << "switching to " << minimaxRecommends->myPokemon->get_name() << endl;
-			sim->get_player()->change_lead(minimaxRecommends->myPokemon);
+		if (minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
+			cout << "Team 1 switching to " << minimaxRecommends->myPokemon->get_name() << endl;
+			sim->get_player()->change_lead_by_name(minimaxRecommends->myPokemon->get_name());
+
 			attacker = sim->get_player()->get_lead();
+
 			switched_last_round = true;
 		} else {
 			cout << "That player has an attack!" << endl;
@@ -243,10 +236,10 @@ int have_a_fight() {
 
 		attack_num = rand() % 4 + 1;
 		int poke_num = attack_num - 4;
-		cout << "attack_num : " << attack_num << " poke_num : " << poke_num << endl;
+		//cout << "attack_num : " << attack_num << " poke_num : " << poke_num << endl;
 		if (attack_num < 5 || tower->get_bench(poke_num)->get_name().compare(defender->get_name()) == 0) {
 			if (attack_num >= 5) attack_num -= 3;
-			cout << "attack_num : " << attack_num << endl;
+			//cout << "attack_num : " << attack_num << endl;
 			next_move = alist->string_to_attack(defender->get_attack(attack_num));
 
 			cout << defender->get_name() << " attacks " << attacker->get_name() << " with " << next_move->get_name() << endl;
@@ -257,7 +250,7 @@ int have_a_fight() {
 			attacker->reduce_hp(damage);
 		} else {
 
-			cout << "switching to " << tower->get_bench(poke_num)->get_name() << endl;
+			cout << "Team 2 switching to " << tower->get_bench(poke_num)->get_name() << endl;
 			tower->change_lead(tower->get_bench(poke_num));
 
 		}
@@ -265,14 +258,12 @@ int have_a_fight() {
 		cout << "Round " << round_num << endl;
 		cout << " " << attacker->get_name() << " hp: " << attacker->get_current_hp() << endl;
 		cout << " " << defender->get_name() << " hp: " << defender->get_current_hp() << endl;
-		delete s; delete s2; delete t;
 
 		if (round_num > 100)  // too long just call it a tie
 			break;
 	}
 
 	delete sim;
-	delete sim2;
 
 	int ret_val =0;
 	if (!tower->isAlive() && !laptop->isAlive()) {

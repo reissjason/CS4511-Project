@@ -1,0 +1,30 @@
+#!/bin/bash
+
+i="0"
+team_1_wins="0"
+team_2_wins="0"
+ties="0"
+games=500
+
+
+while [ $i -lt $games ]
+do
+echo "Running game " $i
+./minimax_game2 > temp_results
+if ( cat temp_results | grep "Team 1 wins" ); then
+	team_1_wins=$[$team_1_wins+1]
+fi
+if ( cat temp_results | grep "Team 2 wins" ); then
+	team_2_wins=$[$team_2_wins+1]	
+fi
+if ( cat temp_results | grep "There was a tie" ); then
+	ties=$[ties+1]
+fi
+
+i=$[ $i + 1 ]
+done
+
+echo "Out of " $games " Games"
+echo "There were " $team_1_wins " Team 1 wins"
+echo "There were " $team_2_wins " Team 2 wins"
+echo "There were " $ties " ties"

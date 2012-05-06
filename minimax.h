@@ -6,51 +6,56 @@
 #include <limits.h>
 #include "debug_print.h"
 #include "minimax.h"
+#include "Node.h"
+#include "Move.h"
 
 
 using namespace std;
+//
+Node<Move>* minimax(Node<Move> *tree);
+Node<Move>* max_value(Node<Move> *tree, Node<Move> *alpha, Node<Move> *beta);
+Node<Move>* min_value(Node<Move> *tree, Node<Move>* alpha, Node<Move>* beta);
+Node<Move>* minimum(Node<Move>* val1, Node<Move>* val2);
+Node<Move>* maximum(Node<Move>* val1, Node<Move>* val2);
 
-template <class S>
-S* minimax(S *tree) {
 
-  S *v = max_value(tree, new S(new int(INT_MIN)), new S(new int(INT_MAX)));
-  return v;
+Node<Move>* minimax(Node<Move> *tree) {
+
+	Node<Move> *v = max_value(tree, new Node<Move>(new Move(INT_MIN)), new Node<Move>(new Move(INT_MAX)));
+	return v;
 }
 
-template <class S>
-S* max_value(S *tree, S *alpha, S *beta) {
+Node<Move>* max_value(Node<Move> *tree, Node<Move> *alpha, Node<Move> *beta) {
   if (!tree->hasChildren()) return tree;
 
-  S *temp = tree->getChildren();
-  S *v = new S(new int(INT_MIN));
+  Node<Move> *temp = tree->getChildren();
+  Node<Move> *v = new Node<Move>(new Move(INT_MIN));
   while (temp != NULL) {
     v = maximum(v, min_value(temp, alpha, beta));
-    if (*v->getValue() <= *alpha->getValue()) return v;
+    if (v->getValue()->getValue() <= alpha->getValue()->getValue()) return v;
     beta = minimum(beta, v);
     temp = temp->getNext();
   }
   return v;
 }
 
-template <class S>
-S* min_value(S *tree, S* alpha, S* beta) {
+Node<Move>* min_value(Node<Move> *tree, Node<Move>* alpha, Node<Move>* beta) {
 	if (!tree->hasChildren()) return tree;
 
-	S *temp = tree->getChildren();
-	S* v = new S(new int(INT_MAX));
+	Node<Move> *temp = tree->getChildren();
+	Node<Move>* v = new Node<Move>(new Move(INT_MAX));
 	while (temp != NULL) {
 		v = minimum(v, max_value(temp, alpha, beta));
-		if (*v->getValue() <= *alpha->getValue()) return v;
+		if (v->getValue()->getValue() <= alpha->getValue()->getValue()) return v;
 		beta = maximum(beta, v);
 		temp = temp->getNext();
 	}
 	return v;
 }
 
-template <class T>
-T* minimum(T* val1, T* val2) {
-  T* min = NULL;
-  if (*val1->getValue() < *val2->getValue())
+Node<Move>* minimum(Node<Move>* val1, Node<Move>* val2) {
+	Node<Move>* min = NULL;
+  if (val1->getValue()->getValue() < val2->getValue()->getValue())
     min = val1;
   else
     min = val2;
@@ -58,10 +63,10 @@ T* minimum(T* val1, T* val2) {
     return min;
 }
 
-template <class T>
-T* maximum(T* val1, T* val2) {
-  T* max = NULL;
-  if (*val1->getValue() > *val2->getValue())
+
+Node<Move>* maximum(Node<Move>* val1, Node<Move>* val2) {
+	Node<Move>* max = NULL;
+  if (val1->getValue()->getValue() > val2->getValue()->getValue())
     max = val1;
   else
     max = val2;

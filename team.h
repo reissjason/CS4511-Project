@@ -15,6 +15,7 @@ public:
   ~team() { cout << "delete team" << endl; delete one; delete two; delete three; delete four; delete five; delete six; }
   
   bool change_lead(Pokeman * new_lead);
+  void change_lead_by_name(string name);
 
   int get_fainted();
   int get_total();

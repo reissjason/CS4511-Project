@@ -56,7 +56,7 @@ team::team(const team& ta){
 
 bool team::change_lead(Pokeman * new_lead){
 //::TODO check if new lead is fainted
-  if(lead->get_name().compare(new_lead->get_name()) == 0){
+  if(lead != NULL && new_lead != NULL && lead->get_name().compare(new_lead->get_name()) == 0){
     cout << "Error in change_lead, given pokemon is already active" << endl;
     return false;
   }
@@ -65,8 +65,28 @@ bool team::change_lead(Pokeman * new_lead){
     return false;
   }else {
     lead = new_lead;
+    cout << " new lead " << lead->get_name() << endl;
     return true;
   }
+}
+
+void team::change_lead_by_name(string name) {
+	cout << "changing lead to (" << name << ")" << endl;
+	cout << "choose from " << one->get_name() << one->isAlive() << " | ";
+	cout << two->get_name() << two->isAlive() << " | " << three->get_name() << three->isAlive() << endl;
+	if (one != NULL && one->get_name().compare(name) == 0)
+		change_lead(one);
+	else if (two != NULL && two->get_name().compare(name) == 0)
+		change_lead(two);
+	else if (three != NULL && three->get_name().compare(name) == 0)
+		change_lead(three);
+	else if (four != NULL && four->get_name().compare(name) == 0)
+		change_lead(four);
+	else if (five != NULL && five->get_name().compare(name) == 0)
+		change_lead(five);
+	else if (six != NULL && six->get_name().compare(name) == 0)
+		change_lead(six);
+
 }
 
 int team::get_fainted(){

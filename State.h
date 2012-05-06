@@ -23,7 +23,8 @@ public:
 
 	State(Pokeman *pokemon1, Pokeman *pokemon2, int turn);
 	State(Pokeman *winner);
-  State(State &s);
+	State(Pokeman *suggest, int move) { myPokemon = suggest; actionUsed = move; }
+	State(State &s);
 	State(int *);
 	State* nextState(int);
 	~State();
