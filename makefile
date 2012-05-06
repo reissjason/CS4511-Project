@@ -73,7 +73,7 @@ minimax_game: minimax_game.cpp pkmn attack.o battle.o type.o
 	g++ minimax_game.cpp type.cpp pokeman.cpp battle.cpp Turn.cpp State.cpp tinyAttack.cpp team.cpp list.cpp debug_print.cpp turn_minimax.cpp -o minimax_game -w	
 
 minimax_game2: minimax_game_2.cpp pkmn attack.o battle.o type.o
-	g++ minimax_game_2.cpp type.cpp pokeman.cpp battle.cpp Turn.cpp State.cpp tinyAttack.cpp attack_minimax.cpp team.cpp list.cpp debug_print.cpp turn_minimax.cpp -o minimax_game2 -w	
+	g++ minimax_game_2.cpp type.cpp pokeman.cpp battle.cpp Turn.cpp State.cpp tinyAttack.cpp attack_minimax.cpp team.cpp list.cpp debug_print.cpp turn_minimax.cpp -o minimax_game2 -w -lrt	
 
 
 random_game: minimax_game.cpp pkmn attack.o battle.o type.o

@@ -7,6 +7,7 @@
 #include <string>
 #include <sstream>
 #include <stdio.h>
+#include <sys/time.h>
 #include "list.h"
 
 #include "Turn.h"
@@ -282,11 +283,17 @@ int have_a_fight() {
 	return ret_val;
 }
 
-int main() {
+int main(int argc, char** argv) {
 
 	alist->construct_list();
 
-	srand(time(NULL));
+	//srand(time(NULL));
+
+	timespec ts;
+	clock_gettime(CLOCK_REALTIME, &ts);
+
+	srand(ts.tv_nsec);
+
 	int num_of_battles = 1;
 
 	int results[3] = {0,0,0};
