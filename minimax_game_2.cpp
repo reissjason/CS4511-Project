@@ -206,7 +206,7 @@ int have_a_fight(string teams) {
 		cout << attacker->get_name() << " vs " << defender->get_name() << endl;
 
 		while(!(team_1_went && team_2_went)) {
-			cout << "t1w: " << team_1_went << " t2w: " << team_2_went << endl;
+			//cout << "t1w: " << team_1_went << " t2w: " << team_2_went << endl;
 
 			if (attacker->get_stat(5) == defender->get_stat(5) && (rand() % 100 > 50))
 				team_1_first = true;
