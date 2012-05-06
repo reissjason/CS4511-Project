@@ -5,3 +5,11 @@ Alex Koenen - wolvie28@gmail.com
 Jason Reiss - reis0140@umn.edu
 Chris Sudduth - sudd0014@umn.edu
 Nicholas Tiry - tiryx007@umn.edu
+
+To run a full battle simulation, pitting our minimax ai against random, execute these commands:
+  make minimax_game
+  ./minimax_game
+
+Known Bugs:
+1) Minimax switches to Pokemon that have been knocked out.
+2) Attacks that affect a Pokemon's status do not properly update the status.
