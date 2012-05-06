@@ -6,6 +6,8 @@
 NUMBERS="012 013 014 015 023 024 025 034 035 045 123 124 125 134 135 145 234 235 245 345"
 
 games=10
+margin=0.1 # call with 10 percent close
+margin=$(echo "scale=4; $games*$margin" | bc)
 
 team_1_edge_points=0
 team_2_edge_points=0
@@ -20,16 +22,20 @@ do
   	cur_wins_1=` cat temp_team_results | perl -n -e'/(\d+)\s+Team 1 wins!!/ && print $1'`
   	cur_wins_2=` cat temp_team_results | perl -n -e'/(\d+)\s+Team 2 wins!!/ && print $1'`
 
-	if [ $cur_wins_1 -eq $cur_wins_2 ]; then
+	cur_even_steven=$(echo "$(($cur_wins_1-$cur_wins_2)) < $margin" | bc)
+
+	echo "Team 1: " $cur_wins_1 " Team 2: " $cur_wins_2 " diff: " $(($cur_wins_1-$cur_wins_2))
+
+	if [ $cur_even_steven -gt 0 ]; then
 		even_steven=$(($even_steven+1))  	
 		echo "Teams were even"
-	fi
-  	
-  	if [ $cur_wins_1 -gt $cur_wins_2 ]; then
-  		team_1_edge_points=$(($team_1_edge_points+1))
-  	else
-		team_2_edge_points=$(($team_2_edge_points+1))
-		echo "Team 2 had edge"
+	else
+  		if [ $cur_wins_1 -gt $cur_wins_2 ]; then
+  			team_1_edge_points=$(($team_1_edge_points+1))
+  		else
+			team_2_edge_points=$(($team_2_edge_points+1))
+			echo "Team 2 had edge"
+	  	fi
   	fi
   	
   	wins_1=$(($wins_1+$cur_wins_1))
@@ -37,7 +43,8 @@ do
 	ties=$(($ties+` cat temp_team_results | perl -n -e'/(\d+)\s+ties!!/ && print $1'`))
   done
 done
-
+echo
+echo "--------------------------"
 echo -e "total wins\t" $wins_1 " for Team 1"
 echo -e "edge points\t" $team_1_edge_points " for Team 1"
 echo -e "total wins\t" $wins_2 " for Team 2"
