@@ -1,5 +1,9 @@
 #!/bin/bash
 
+if [ ! -f ./minimax_game ]; then
+	make minimax_game
+fi
+
 i="0"
 team_1_wins="0"
 team_2_wins="0"

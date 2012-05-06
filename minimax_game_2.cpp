@@ -248,7 +248,7 @@ int have_a_fight(string teams) {
 				} else {
 					if (!attacker->isAlive()) {
 						cout << "Team 1 pokemon KO'd!" << endl;
-						team_2_went = true;
+						team_1_went = true;
 						continue;
 					}
 
