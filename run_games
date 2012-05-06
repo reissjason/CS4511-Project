@@ -16,11 +16,11 @@ fi
 while [ $i -lt $games ]
 do
 echo "Running game " $i
-./minimax_game > temp_results
-if ( cat temp_results | grep "Team 1 wins" ); then
+./minimax_game $2 > temp_results
+if ( cat temp_results | grep "Team 1 wins!!" ); then
 	team_1_wins=$[$team_1_wins+1]
 fi
-if ( cat temp_results | grep "Team 2 wins" ); then
+if ( cat temp_results | grep "Team 2 wins!!" ); then
 	team_2_wins=$[$team_2_wins+1]	
 fi
 if ( cat temp_results | grep "There was a tie" ); then

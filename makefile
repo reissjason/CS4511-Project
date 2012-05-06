@@ -81,7 +81,7 @@ random_game: minimax_game.cpp pkmn attack.o battle.o type.o
 
 # Other Targets
 clean:
-	-rm -fr *.o *_test *.out.txt minimax_game random_game minimax_game2 temp_results
+	-rm -fr *.o *_test *.out.txt minimax_game random_game minimax_game2 temp_results temp_team_results
 
 .PHONY: all clean dependents
 

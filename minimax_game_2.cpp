@@ -125,7 +125,7 @@ TinyAttack * string_to_attack(string move_name){
 	return NULL;
 }
 
-int have_a_fight() {
+int have_a_fight(string teams) {
 
 	string pokemons[] = { "charizard",
 			"roserade",
@@ -135,7 +135,14 @@ int have_a_fight() {
 			"porygon2"
 	};
 
-	string choices = "456123";
+	string choices = "";
+
+	if (teams == "")
+		choices = "";
+	else
+		choices = teams.substr(0,6);
+
+	cout << "choices : " << choices << endl;
 
 	while (choices.length() < 6) {
 		int num = rand() % 6;
@@ -244,7 +251,7 @@ int have_a_fight() {
 			next_move = alist->string_to_attack(defender->get_attack(attack_num));
 
 			cout << defender->get_name() << " attacks " << attacker->get_name() << " with " << next_move->get_name() << endl;
-			cout << next_move->get_name() << " has effect " << next_move->get_effect() << endl;
+			cout << "That attack has power = " << next_move->get_power() << "!" << endl;
 			damage = sim->calculate_damage(next_move, defender, attacker);
 			cout << "damage = " << damage << endl;
 
@@ -298,16 +305,22 @@ int main(int argc, char** argv) {
 
 	int results[3] = {0,0,0};
 
+
+	string teams = "";
+
+	if (argc > 1)
+		teams = string(argv[1]);
+
 	for(int i=0; i<num_of_battles; i++) {
 		cout << "Battle " << i+1 << endl;
-		int result = have_a_fight();
+		int result = have_a_fight(teams);
 		results[result]++;
 	}
 
-	cout << "Out of " << num_of_battles << " battles there were:" << endl;
-	cout << "\t" << results[0] << "\tties" << endl;
-	cout << "\t" << results[1] << "\tteam 1 wins" << endl;
-	cout << "\t" << results[2] << "\tteam 2 wins" << endl;
+//	cout << "Out of " << num_of_battles << " battles there were:" << endl;
+//	cout << "\t" << results[0] << "\tties" << endl;
+//	cout << "\t" << results[1] << "\tteam 1 wins" << endl;
+//	cout << "\t" << results[2] << "\tteam 2 wins" << endl;
 
 
 	return 0;

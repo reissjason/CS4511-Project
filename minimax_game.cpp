@@ -124,7 +124,7 @@ TinyAttack * string_to_attack(string move_name){
 	return NULL;
 }
 
-int have_a_fight() {
+int have_a_fight(string teams) {
 
 	string pokemons[] = { "charizard",
 			"roserade",
@@ -135,6 +135,13 @@ int have_a_fight() {
 	};
 
 	string choices = "";
+
+	if (teams == "")
+		choices = "";
+	else
+		choices = teams.substr(0,6);
+
+	cout << "choices : " << choices << endl;
 
 	while (choices.length() < 6) {
 		int num = rand() % 6;
@@ -291,7 +298,8 @@ int have_a_fight() {
 	return ret_val;
 }
 
-int main() {
+
+int main(int argc, char** argv) {
 
 	alist->construct_list();
 
@@ -300,9 +308,14 @@ int main() {
 
 	int results[3] = {0,0,0};
 
+	string teams = "";
+
+	if (argc > 1)
+		teams = string(argv[1]);
+
 	for(int i=0; i<num_of_battles; i++) {
 		cout << "Battle " << i+1 << endl;
-		int result = have_a_fight();
+		int result = have_a_fight(teams);
 		results[result]++;
 	}
 
