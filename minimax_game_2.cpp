@@ -192,6 +192,11 @@ int have_a_fight(string teams) {
 
 	TinyAttack *last_move = NULL;
 
+	bool team_1_went = false;
+	bool team_2_went = false;
+	bool team_1_first = false;
+	bool random_win = false;
+
 	while (laptop->isAlive() && tower->isAlive()) {
 		cout << "****************************************************" << endl;
 
@@ -200,72 +205,112 @@ int have_a_fight(string teams) {
 		defender = sim->get_opponent()->get_lead();
 		cout << attacker->get_name() << " vs " << defender->get_name() << endl;
 
-		State* minimaxRecommends = run_minimax(sim);
+		while(!(team_1_went && team_2_went)) {
+			cout << "t1w: " << team_1_went << " t2w: " << team_2_went << endl;
 
-		cout << "MINIMAX RECOMMENDS: " << minimaxRecommends->getActionUsed() << endl;
-		attack_num = minimaxRecommends->getActionUsed();
-		next_move = alist->string_to_attack(attacker->get_attack(attack_num));
-		//cout << "test = " << minimaxRecommends->myPokemon->get_name() << endl;
-//		if (last_move != NULL)
-//			cout << "last move: " << last_move->get_power() << endl;
-//		cout << "next move: " << next_move->get_power() << endl;
+			if (attacker->get_stat(5) == defender->get_stat(5) && (rand() % 100 > 50))
+				team_1_first = true;
+			else {
+				if(attacker->get_stat(5) > defender->get_stat(5))
+					team_1_first = true;
+				else
+					team_1_first == false;
+			}
 
-//		if (last_move != NULL && last_move->get_power() >= next_move->get_power()) {
-//			next_move = last_move;
-//			dont_switch = true;
-//		} else {
-//			dont_switch = false;
-//		}
+			if (!team_1_went && team_1_first || team_2_went) {
+				if (!team_1_went && !team_2_went)
+					cout << "Team 1 goes first " << attacker->get_stat(5) << " > " << defender->get_stat(5) << endl;
 
-		if (minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
-			cout << "Team 1 switching to " << minimaxRecommends->myPokemon->get_name() << endl;
-			sim->get_player()->change_lead_by_name(minimaxRecommends->myPokemon->get_name());
+				State* minimaxRecommends = run_minimax(sim);
 
-			attacker = sim->get_player()->get_lead();
+				cout << "MINIMAX RECOMMENDS: " << minimaxRecommends->getActionUsed() << endl;
+				attack_num = minimaxRecommends->getActionUsed();
+				next_move = alist->string_to_attack(attacker->get_attack(attack_num));
+				//cout << "test = " << minimaxRecommends->myPokemon->get_name() << endl;
+				//		if (last_move != NULL)
+				//			cout << "last move: " << last_move->get_power() << endl;
+				//		cout << "next move: " << next_move->get_power() << endl;
 
-			switched_last_round = true;
-		} else {
-			cout << "That player has an attack!" << endl;
-			cout << "look for attack #" << attack_num << endl;
-			cout << attacker->get_attack(attack_num) << endl;
+				//		if (last_move != NULL && last_move->get_power() >= next_move->get_power()) {
+				//			next_move = last_move;
+				//			dont_switch = true;
+				//		} else {
+				//			dont_switch = false;
+				//		}
 
-			cout << "That attack has power = " << next_move->get_power() << "!" << endl;
-			cout << attacker->get_name() << " attacks " << defender->get_name() << " with " << next_move->get_name() << endl;
+				if (minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
+					cout << "Team 1 switching to " << minimaxRecommends->myPokemon->get_name() << endl;
+					sim->get_player()->change_lead_by_name(minimaxRecommends->myPokemon->get_name());
 
-			damage = sim->calculate_damage(next_move, attacker, defender);
-			cout << "damage = " << damage << endl;
+					attacker = sim->get_player()->get_lead();
 
-			defender->reduce_hp(damage);
-			last_move = next_move;
-			switched_last_round = false;
+					switched_last_round = true;
+				} else {
+					if (!attacker->isAlive()) {
+						cout << "Team 1 pokemon KO'd!" << endl;
+						team_2_went = true;
+						continue;
+					}
+
+					cout << "That player has an attack!" << endl;
+					cout << "look for attack #" << attack_num << endl;
+					cout << attacker->get_attack(attack_num) << endl;
+
+					cout << "That attack has power = " << next_move->get_power() << "!" << endl;
+					cout << attacker->get_name() << " attacks " << defender->get_name() << " with " << next_move->get_name() << endl;
+
+					damage = sim->calculate_damage(next_move, attacker, defender);
+					cout << "damage = " << damage << endl;
+
+					defender->reduce_hp(damage);
+					last_move = next_move;
+					switched_last_round = false;
+				}
+
+
+				delete minimaxRecommends;
+				team_1_went = true;
+			} else if (!team_2_went) {
+				if (!team_1_went && !team_2_went)
+					cout << "Team 2 goes first " << attacker->get_stat(5) << " < " << defender->get_stat(5) << endl;
+
+				attack_num = rand() % 4 + 1;
+				int poke_num = attack_num - 4;
+				//cout << "attack_num : " << attack_num << " poke_num : " << poke_num << endl;
+				if (attack_num < 5 || tower->get_bench(poke_num)->get_name().compare(defender->get_name()) == 0) {
+					if (!defender->isAlive()) {
+						cout << "Team 2 pokemon KO'd!" << endl;
+						team_2_went = true;
+						continue;
+					}
+
+					if (attack_num >= 5) attack_num -= 3;
+					//cout << "attack_num : " << attack_num << endl;
+					next_move = alist->string_to_attack(defender->get_attack(attack_num));
+
+					cout << defender->get_name() << " attacks " << attacker->get_name() << " with " << next_move->get_name() << endl;
+					cout << "That attack has power = " << next_move->get_power() << "!" << endl;
+					damage = sim->calculate_damage(next_move, defender, attacker);
+					cout << "damage = " << damage << endl;
+
+					attacker->reduce_hp(damage);
+				} else {
+
+					cout << "Team 2 switching to " << tower->get_bench(poke_num)->get_name() << endl;
+					tower->change_lead(tower->get_bench(poke_num));
+
+				}
+				team_2_went = true;
+			}
 		}
 
-		delete minimaxRecommends;
-
-		attack_num = rand() % 4 + 1;
-		int poke_num = attack_num - 4;
-		//cout << "attack_num : " << attack_num << " poke_num : " << poke_num << endl;
-		if (attack_num < 5 || tower->get_bench(poke_num)->get_name().compare(defender->get_name()) == 0) {
-			if (attack_num >= 5) attack_num -= 3;
-			//cout << "attack_num : " << attack_num << endl;
-			next_move = alist->string_to_attack(defender->get_attack(attack_num));
-
-			cout << defender->get_name() << " attacks " << attacker->get_name() << " with " << next_move->get_name() << endl;
-			cout << "That attack has power = " << next_move->get_power() << "!" << endl;
-			damage = sim->calculate_damage(next_move, defender, attacker);
-			cout << "damage = " << damage << endl;
-
-			attacker->reduce_hp(damage);
-		} else {
-
-			cout << "Team 2 switching to " << tower->get_bench(poke_num)->get_name() << endl;
-			tower->change_lead(tower->get_bench(poke_num));
-
-		}
 		round_num++;
 		cout << "Round " << round_num << endl;
 		cout << " " << attacker->get_name() << " hp: " << attacker->get_current_hp() << endl;
 		cout << " " << defender->get_name() << " hp: " << defender->get_current_hp() << endl;
+
+		team_1_went = false;
+		team_2_went = false;
 
 		if (round_num > 100)  // too long just call it a tie
 			break;
@@ -317,10 +362,10 @@ int main(int argc, char** argv) {
 		results[result]++;
 	}
 
-//	cout << "Out of " << num_of_battles << " battles there were:" << endl;
-//	cout << "\t" << results[0] << "\tties" << endl;
-//	cout << "\t" << results[1] << "\tteam 1 wins" << endl;
-//	cout << "\t" << results[2] << "\tteam 2 wins" << endl;
+	//	cout << "Out of " << num_of_battles << " battles there were:" << endl;
+	//	cout << "\t" << results[0] << "\tties" << endl;
+	//	cout << "\t" << results[1] << "\tteam 1 wins" << endl;
+	//	cout << "\t" << results[2] << "\tteam 2 wins" << endl;
 
 
 	return 0;
