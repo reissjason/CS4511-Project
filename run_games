@@ -1,5 +1,8 @@
 #!/bin/bash
 
+rm -f temp_results*
+rm -f processed_output*
+
 if [ ! -f ./minimax_game ]; then
 	make minimax_game
 fi
@@ -20,16 +23,25 @@ fi
 while [ $i -lt $games ]
 do
 echo "Running game " $i
-./minimax_game $2 > temp_results
-if ( cat temp_results | grep "Team 1 wins!!" ); then
+./minimax_game $2 > temp_results$i
+
+if [ $i -gt "50" ]; then
+	file_num="50"
+else
+	file_num=$i
+fi
+
+if ( cat "temp_results$file_num" | grep "Team 1 wins!!" ); then
 	team_1_wins=$[$team_1_wins+1]
 fi
-if ( cat temp_results | grep "Team 2 wins!!" ); then
+if ( cat "temp_results$file_num" | grep "Team 2 wins!!" ); then
 	team_2_wins=$[$team_2_wins+1]	
 fi
-if ( cat temp_results | grep "There was a tie" ); then
+if ( cat "temp_results$file_num" | grep "There was a tie" ); then
 	ties=$[ties+1]
 fi
+
+./process $file_num
 
 i=$[ $i + 1 ]
 done

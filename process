@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ $1 ]; then
+	file=$(echo "temp_results$1")
+else
+	file=temp_results
+fi
+
+
+line_num=1
+echo "<document>" > "processed_output$1"
+while read line;
+do
+	if [[ ! "$line" == *\*\*\*\*\* ]]; then
+		if [[ ! $line == *KO* ]]; then
+			line=`echo $line | sed -e 's/</\&lt;/' | sed -e 's/>/\&gt;/'`
+		fi
+	fi
+	echo " <line>$line</line> " >> "processed_output$1"
+	line_num=$(($line_num+1))
+	
+done < $file
+
+echo "</document>" >> "processed_output$1"
