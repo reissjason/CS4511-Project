@@ -225,7 +225,8 @@ int have_a_fight(string teams) {
 //			dont_switch = false;
 //		}
 
-		if (!switched_last_round && !dont_switch && minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
+		//!switched_last_round && !dont_switch &&
+		if ( minimaxRecommends->myPokemon->get_name().compare(attacker->get_name()) != 0) {
 			cout << "switching to " << minimaxRecommends->myPokemon->get_name() << endl;
 			sim->get_player()->change_lead(minimaxRecommends->myPokemon);
 			attacker = sim->get_player()->get_lead();
@@ -283,13 +284,13 @@ int have_a_fight(string teams) {
 
 	int ret_val =0;
 	if (!tower->isAlive() && !laptop->isAlive()) {
-		cout << endl << "There was a tie!" << endl << endl;
+		cout << endl << "There was a tie!!" << endl << endl;
 		ret_val = 0;
 	} else if (tower->isAlive()) {
-		cout << endl << "Team 2 wins!" << endl << endl;
+		cout << endl << "Team 2 wins!!" << endl << endl;
 		ret_val = 2;
 	} else {
-		cout << endl << "Team 1 wins!" << endl << endl;
+		cout << endl << "Team 1 wins!!" << endl << endl;
 		ret_val = 1;
 	}
 
